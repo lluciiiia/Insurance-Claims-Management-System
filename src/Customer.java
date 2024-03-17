@@ -4,9 +4,8 @@ package src;
 * @author <Seokyung Kim - s3939114>
 */
 
-import java.util.List;
-
 import static src.CustomerType.*;
+import java.util.List;
 
 public class Customer {
     private String id;
@@ -81,11 +80,25 @@ public class Customer {
         return dependents;
     }
 
-    public void addDependents(Customer dependent) {
+    public void addDependent(Customer dependent) {
         if (this.customerType == DEPENDENT || dependent.getCustomerType() == POLICY_HOLDER) {
             throw new UnsupportedOperationException("Only dependents can have policy holders.");
         }
+        if (this.dependents.isEmpty()) {
+            throw new UnsupportedOperationException("Please set dependents before adding a new dependent.");
+        }
         this.dependents.add(dependent);
     }
+
+    public void setDependents(List<Customer> dependents) {
+        if (this.customerType != CustomerType.POLICY_HOLDER) {
+            throw new UnsupportedOperationException("Only policy holders can have dependents.");
+        }
+        if (!this.dependents.isEmpty()) {
+            throw new UnsupportedOperationException("A list of dependents already exists. To modify the list, please clear the existing dependents first.");
+        }
+        this.dependents = dependents;
+    }
+
 
 }

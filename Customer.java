@@ -1,8 +1,11 @@
-import java.util.List;
+
 
 /*
 * @author <Seokyung Kim - s3939114>
 */
+
+import java.util.List;
+
 public class Customer {
     private String id;
     private String fullName;
@@ -15,7 +18,6 @@ public class Customer {
         this.insuranceCard = insuranceCard;
         this.claims = claims;
     }
-
 
     public String getId() {
         return id;

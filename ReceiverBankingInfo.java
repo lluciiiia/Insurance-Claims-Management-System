@@ -1,3 +1,7 @@
+/*
+ * @author <Seokyung Kim - s3939114>
+ */
+
 public class ReceiverBankingInfo {
     private String bank;
     private String name;

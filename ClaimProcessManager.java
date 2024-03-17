@@ -1,3 +1,7 @@
+/*
+ * @author <Seokyung Kim - s3939114>
+ */
+
 import java.util.List;
 
 interface ClaimProcessManager {

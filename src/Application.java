@@ -1,4 +1,12 @@
 package src;
+
+import src.ClaimProcessManager.ClaimProcessManager;
+import src.ClaimProcessManager.ClaimProcessManagerImpl;
+import src.FileManager.FileManager;
+import src.FileManager.FileManagerImpl;
+
+import java.io.IOException;
+
 /*
  * @author <Seokyung Kim - s3939114>
  */
@@ -30,10 +38,11 @@ public class Application {
         // Implement handling of user input
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // Initialize ClaimProcessManager and FileManager
-        ClaimProcessManager claimProcessManager = new SimpleClaimProcessManager();
-        FileManager fileManager = new FileManager();
+        ClaimProcessManager claimProcessManager = new ClaimProcessManagerImpl();
+        FileManager fileManager = new FileManagerImpl();
+        fileManager.loadFiles();
 
         // Initialize Application with ClaimProcessManager and FileManager
         Application application = new Application(claimProcessManager, fileManager);

@@ -4,7 +4,7 @@ package src;
  * @author <Seokyung Kim - s3939114>
  */
 
-enum CustomerType {
+public enum CustomerType {
     POLICY_HOLDER,
     DEPENDENT
 }

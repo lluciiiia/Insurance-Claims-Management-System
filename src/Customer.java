@@ -15,27 +15,33 @@ public class Customer {
     private CustomerType customerType;
     private List<Customer> dependents;
 
-    public Customer(String id, String fullName, InsuranceCard insuranceCard, List<Claim> claims, CustomerType customerType) {
+    public Customer(String id, String fullName, CustomerType customerType) {
         this.id = id;
         this.fullName = fullName;
-        this.insuranceCard = insuranceCard;
-        this.claims = claims;
         this.customerType = customerType;
     }
 
-    public Customer(String id, String fullName, InsuranceCard insuranceCard, List<Claim> claims, CustomerType customerType, List<Customer> dependents) {
-        this.id = id;
-        this.fullName = fullName;
-        this.insuranceCard = insuranceCard;
-        this.claims = claims;
-
-        if (customerType != CustomerType.POLICY_HOLDER && !dependents.isEmpty()) {
-            throw new IllegalArgumentException("Only policy holders can have dependents.");
-        }
-
-        this.customerType = customerType;
-        this.dependents = dependents;
-    }
+//    public Customer(String id, String fullName, InsuranceCard insuranceCard, List<Claim> claims, CustomerType customerType) {
+//        this.id = id;
+//        this.fullName = fullName;
+//        this.insuranceCard = insuranceCard;
+//        this.claims = claims;
+//        this.customerType = customerType;
+//    }
+//
+//    public Customer(String id, String fullName, InsuranceCard insuranceCard, List<Claim> claims, CustomerType customerType, List<Customer> dependents) {
+//        this.id = id;
+//        this.fullName = fullName;
+//        this.insuranceCard = insuranceCard;
+//        this.claims = claims;
+//
+//        if (customerType != CustomerType.POLICY_HOLDER && !dependents.isEmpty()) {
+//            throw new IllegalArgumentException("Only policy holders can have dependents.");
+//        }
+//
+//        this.customerType = customerType;
+//        this.dependents = dependents;
+//    }
 
     public String getId() {
         return id;

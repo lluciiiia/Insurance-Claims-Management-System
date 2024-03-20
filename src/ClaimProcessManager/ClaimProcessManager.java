@@ -1,11 +1,13 @@
-package src;
+package src.ClaimProcessManager;
 /*
  * @author <Seokyung Kim - s3939114>
  */
 
+import src.Claim;
+
 import java.util.List;
 
-interface ClaimProcessManager {
+public interface ClaimProcessManager {
     void add(Claim claim);
 
     void update(Claim claim);

@@ -1,11 +1,14 @@
-package src;
+package src.ClaimProcessManager;
 /*
  * @author <Seokyung Kim - s3939114>
  */
 
+import src.Claim;
+import src.ClaimProcessManager.ClaimProcessManager;
+
 import java.util.List;
 
-public class SimpleClaimProcessManager implements ClaimProcessManager {
+public class ClaimProcessManagerImpl implements ClaimProcessManager {
     private List<Claim> claims;
 
     @Override

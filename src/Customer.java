@@ -100,10 +100,30 @@ public class Customer {
         if (this.customerType != CustomerType.POLICY_HOLDER) {
             throw new UnsupportedOperationException("Only policy holders can have dependents.");
         }
-        if (!this.dependents.isEmpty()) {
+        if (this.dependents != null) {
             throw new UnsupportedOperationException("A list of dependents already exists. To modify the list, please clear the existing dependents first.");
         }
         this.dependents = dependents;
+    }
+
+    public void printCustomer() {
+        System.out.println("Customer ID: " + this.getId());
+        System.out.println("Full Name: " + this.getFullName());
+        System.out.println("Customer Type: " + this.getCustomerType());
+        if (this.getInsuranceCard() != null) {
+            System.out.println("Insurance Card Number: " + this.getInsuranceCard().getCardNumber());
+            System.out.println("Insurance Card Holder: " + this.getInsuranceCard().getCardHolder());
+            System.out.println("Policy Owner: " + this.getInsuranceCard().getPolicyOwner());
+            System.out.println("Expiration Date: " + this.getInsuranceCard().getExpirationDate());
+        }
+        if (this.getDependents() != null && !this.getDependents().isEmpty()) {
+            System.out.println("Dependents:");
+            for (Customer dependent : this.getDependents()) {
+                System.out.println("\tDependent ID: " + dependent.getId());
+                System.out.println("\tDependent Full Name: " + dependent.getFullName());
+                System.out.println("\tDependent Customer Type: " + dependent.getCustomerType());
+            }
+        }
     }
 
 

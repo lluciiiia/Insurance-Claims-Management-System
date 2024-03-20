@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileManagerImpl implements FileManager{
-    private final Path CUSTOMERS_FILE = Paths.get("customers.txt");
-    private final Path INSURANCE_CARDS_FILE = Paths.get("insurance_cards.txt");
-    private final Path CLAIMS_FILE = Paths.get("claims.txt");
-    private final Path RECEIVER_BANKING_INFO_FILE = Paths.get("receiver_banking_info.txt");
-    private final Path CUSTOMER_RELATIONSHIPS_FILE = Paths.get("customer_relationships.txt");
+    private final Path CUSTOMERS_FILE = Paths.get("src/data/customers.txt");
+    private final Path INSURANCE_CARDS_FILE = Paths.get("src/data/insurance_cards.txt");
+    private final Path CLAIMS_FILE = Paths.get("src/data/claims.txt");
+    private final Path RECEIVER_BANKING_INFO_FILE = Paths.get("src/data/receiver_banking_info.txt");
+    private final Path CUSTOMER_RELATIONSHIPS_FILE = Paths.get("src/data/customer_relationships.txt");
 
     private List<Customer> customers = new ArrayList<>();
 
@@ -26,6 +26,12 @@ public class FileManagerImpl implements FileManager{
     public boolean loadFiles() throws IOException {
         loadCustomersFromFile();
         loadCustomerRelationshipsFromFile();
+
+//        System.out.println("Loaded Customers:");
+//        for (Customer customer : customers) {
+//            customer.printCustomer();
+//        }
+
         loadInsuranceCardsFromFile();
         loadReceiverBankingInfoFromFile();
         loadClaimsFromFile();
@@ -34,7 +40,6 @@ public class FileManagerImpl implements FileManager{
 
     @Override
     public List<Customer> loadCustomersFromFile() throws IOException {
-//        List<> customerRelationships = loadCustomerRelationshipsFromFile();
         try (BufferedReader reader = new BufferedReader(new FileReader(CUSTOMERS_FILE.toFile()))) {
             String line;
             while ((line = reader.readLine()) != null) {

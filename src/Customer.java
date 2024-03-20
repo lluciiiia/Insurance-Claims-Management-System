@@ -112,11 +112,11 @@ public class Customer {
         System.out.println("Customer Type: " + this.getCustomerType());
         if (this.getInsuranceCard() != null) {
             System.out.println("Insurance Card Number: " + this.getInsuranceCard().getCardNumber());
-            System.out.println("Insurance Card Holder: " + this.getInsuranceCard().getCardHolder());
-            System.out.println("Policy Owner: " + this.getInsuranceCard().getPolicyOwner());
+            System.out.println("Insurance Card Holder: " + this.getInsuranceCard().getCardHolder().getId());
+            System.out.println("Policy Owner: " + this.getInsuranceCard().getPolicyOwner().getId());
             System.out.println("Expiration Date: " + this.getInsuranceCard().getExpirationDate());
         }
-        if (this.getDependents() != null && !this.getDependents().isEmpty()) {
+        if (this.getCustomerType() == POLICY_HOLDER && this.getDependents() != null && !this.getDependents().isEmpty()) {
             System.out.println("Dependents:");
             for (Customer dependent : this.getDependents()) {
                 System.out.println("\tDependent ID: " + dependent.getId());

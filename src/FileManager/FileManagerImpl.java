@@ -10,29 +10,32 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class FileManagerImpl implements FileManager{
     private final Path CUSTOMERS_FILE = Paths.get("src/data/customers.txt");
+    private final Path CUSTOMER_RELATIONSHIPS_FILE = Paths.get("src/data/customer_relationships.txt");
     private final Path INSURANCE_CARDS_FILE = Paths.get("src/data/insurance_cards.txt");
     private final Path CLAIMS_FILE = Paths.get("src/data/claims.txt");
     private final Path RECEIVER_BANKING_INFO_FILE = Paths.get("src/data/receiver_banking_info.txt");
-    private final Path CUSTOMER_RELATIONSHIPS_FILE = Paths.get("src/data/customer_relationships.txt");
 
     private List<Customer> customers = new ArrayList<>();
+    private List<InsuranceCard> insuranceCards = new ArrayList<>();
 
     @Override
     public boolean loadFiles() throws IOException {
         loadCustomersFromFile();
         loadCustomerRelationshipsFromFile();
-
-//        System.out.println("Loaded Customers:");
-//        for (Customer customer : customers) {
-//            customer.printCustomer();
-//        }
-
         loadInsuranceCardsFromFile();
+                System.out.println("Loaded Customers:");
+        for (Customer customer : customers) {
+            customer.printCustomer();
+        }
         loadReceiverBankingInfoFromFile();
         loadClaimsFromFile();
         return true;
@@ -92,9 +95,32 @@ public class FileManagerImpl implements FileManager{
     }
 
     @Override
-    public List<InsuranceCard> loadInsuranceCardsFromFile() {
-        return null;
+    public List<InsuranceCard> loadInsuranceCardsFromFile() throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(INSURANCE_CARDS_FILE.toFile()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                String cardNumber = parts[0];
+                String dependentId = parts[1];
+                String policyHolderId = parts[2];
+                String dateString = parts[3];
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date expirationDate = dateFormat.parse(dateString);
+
+                Customer dependent = findCustomerById(dependentId);
+                Customer policyHolder = findCustomerById(policyHolderId);
+
+                InsuranceCard insuranceCard = new InsuranceCard(cardNumber, dependent, policyHolder, expirationDate);
+                dependent.setInsuranceCard(insuranceCard);
+
+                insuranceCards.add(insuranceCard);
+            }
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return insuranceCards;
     }
+
 
     @Override
     public List<Claim> loadClaimsFromFile() {

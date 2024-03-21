@@ -24,8 +24,6 @@ public interface FileManager {
 
     public List<Customer> loadCustomersFromFile() throws IOException;
 
-    Customer findCustomerById(String customerId);
-
     public List<InsuranceCard> loadInsuranceCardsFromFile() throws IOException;
     public List<Claim> loadClaimsFromFile() throws IOException;
 

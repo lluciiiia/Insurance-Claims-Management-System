@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class FileManagerImpl implements FileManager{
@@ -25,6 +26,7 @@ public class FileManagerImpl implements FileManager{
     private final Path RECEIVER_BANKING_INFO_FILE = Paths.get("src/data/receiver_banking_info.txt");
 
     private List<Customer> customers = new ArrayList<>();
+    private HashMap<String, Customer> customersMap = new HashMap<>();
     private List<InsuranceCard> insuranceCards = new ArrayList<>();
 
     @Override
@@ -52,13 +54,10 @@ public class FileManagerImpl implements FileManager{
                 CustomerType customerType = CustomerType.valueOf(parts[2]);
                 Customer customer = new Customer(id, fullName, customerType);
                 customers.add(customer);
+                customersMap.put(id, customer);
             }
         }
         return customers;
-    }
-
-    @Override
-    public void loadReceiverBankingInfoFromFile() throws IOException{
     }
 
     @Override
@@ -71,27 +70,17 @@ public class FileManagerImpl implements FileManager{
                 List<Customer> dependents = new ArrayList<>();
                 for (int i = 1; i < parts.length; i++) {
                     String dependentId = parts[i];
-                    Customer dependent = findCustomerById(dependentId);
+                    Customer dependent = customersMap.get(dependentId);
                     if (dependent != null) {
                         dependents.add(dependent);
                     }
                 }
-                Customer policyHolder = findCustomerById(policyHolderId);
+                Customer policyHolder = customersMap.get(policyHolderId);
                 if (policyHolder != null) {
                     policyHolder.setDependents(dependents);
                 }
             }
         }
-    }
-
-    @Override
-    public Customer findCustomerById(String customerId) {
-        for (Customer customer : customers) {
-            if (customer.getId().equals(customerId)) {
-                return customer;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -107,8 +96,8 @@ public class FileManagerImpl implements FileManager{
                 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date expirationDate = dateFormat.parse(dateString);
 
-                Customer dependent = findCustomerById(dependentId);
-                Customer policyHolder = findCustomerById(policyHolderId);
+                Customer dependent = customersMap.get(dependentId);
+                Customer policyHolder = customersMap.get(policyHolderId);
 
                 InsuranceCard insuranceCard = new InsuranceCard(cardNumber, dependent, policyHolder, expirationDate);
                 dependent.setInsuranceCard(insuranceCard);
@@ -119,6 +108,11 @@ public class FileManagerImpl implements FileManager{
             throw new RuntimeException(e);
         }
         return insuranceCards;
+    }
+
+
+    @Override
+    public void loadReceiverBankingInfoFromFile() throws IOException{
     }
 
 

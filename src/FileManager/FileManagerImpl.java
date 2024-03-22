@@ -1,40 +1,30 @@
 package src.FileManager;
 
-import src.Claim;
-import src.Customer;
-import src.CustomerType;
-import src.InsuranceCard;
+import src.*;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.io.*;
+import java.nio.file.*;
+import java.text.*;
+import java.util.*;
 
 public class FileManagerImpl implements FileManager{
     private final Path CUSTOMERS_FILE = Paths.get("src/data/customers.txt");
     private final Path CUSTOMER_RELATIONSHIPS_FILE = Paths.get("src/data/customer_relationships.txt");
     private final Path INSURANCE_CARDS_FILE = Paths.get("src/data/insurance_cards.txt");
-    private final Path CLAIMS_FILE = Paths.get("src/data/claims.txt");
     private final Path RECEIVER_BANKING_INFO_FILE = Paths.get("src/data/receiver_banking_info.txt");
+    private final Path CLAIMS_FILE = Paths.get("src/data/claims.txt");
 
     private List<Customer> customers = new ArrayList<>();
     private HashMap<String, Customer> customersMap = new HashMap<>();
     private List<InsuranceCard> insuranceCards = new ArrayList<>();
+    private List<ReceiverBankingInfo> receiverBankingInfos = new ArrayList<>();
 
     @Override
     public boolean loadFiles() throws IOException {
         loadCustomersFromFile();
         loadCustomerRelationshipsFromFile();
         loadInsuranceCardsFromFile();
-                System.out.println("Loaded Customers:");
+        System.out.println("Loaded Customers:");
         for (Customer customer : customers) {
             customer.printCustomer();
         }
@@ -111,9 +101,21 @@ public class FileManagerImpl implements FileManager{
 
 
     @Override
-    public void loadReceiverBankingInfoFromFile() throws IOException{
-    }
+    public void loadReceiverBankingInfoFromFile() throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(RECEIVER_BANKING_INFO_FILE.toFile()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                String bank = parts[0];
+                String insuredCustomerId = parts[1];
+                String number = parts[2];
 
+                String insuredCustomerName = customersMap.get(insuredCustomerId).getFullName();
+                ReceiverBankingInfo receiverBankingInfo = new ReceiverBankingInfo(bank, insuredCustomerName, number);
+                receiverBankingInfos.add(receiverBankingInfo);
+            }
+        }
+    }
 
     @Override
     public List<Claim> loadClaimsFromFile() {

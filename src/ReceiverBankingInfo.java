@@ -14,7 +14,6 @@ public class ReceiverBankingInfo {
         this.number = number;
     }
 
-    // Getters and setters
     public String getBank() {
         return bank;
     }

@@ -113,7 +113,7 @@ public class Customer {
         if (this.getInsuranceCard() != null) {
             System.out.println("Insurance Card Number: " + this.getInsuranceCard().getCardNumber());
             System.out.println("Insurance Card Holder: " + this.getInsuranceCard().getCardHolder().getId());
-            System.out.println("Policy Owner: " + this.getInsuranceCard().getPolicyOwner().getId());
+            System.out.println("Policy Owner: " + this.getInsuranceCard().getPolicyOwner());
             System.out.println("Expiration Date: " + this.getInsuranceCard().getExpirationDate());
         }
         if (this.getCustomerType() == POLICY_HOLDER && this.getDependents() != null && !this.getDependents().isEmpty()) {

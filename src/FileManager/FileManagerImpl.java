@@ -91,15 +91,14 @@ public class FileManagerImpl implements FileManager{
                 String[] parts = line.split(",");
                 String cardNumber = parts[0];
                 String dependentId = parts[1];
-                String policyHolderId = parts[2];
+                String policyOwner = parts[2];
                 String dateString = parts[3];
                 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date expirationDate = dateFormat.parse(dateString);
 
                 Customer dependent = customersMap.get(dependentId);
-                Customer policyHolder = customersMap.get(policyHolderId);
 
-                InsuranceCard insuranceCard = new InsuranceCard(cardNumber, dependent, policyHolder, expirationDate);
+                InsuranceCard insuranceCard = new InsuranceCard(cardNumber, dependent, policyOwner, expirationDate);
                 dependent.setInsuranceCard(insuranceCard);
 
                 insuranceCards.add(insuranceCard);

@@ -9,10 +9,10 @@ import java.util.Date;
 public class InsuranceCard {
     private String cardNumber;
     private Customer cardHolder;
-    private Customer policyOwner;
+    private String policyOwner;
     private Date expirationDate;
 
-    public InsuranceCard(String cardNumber, Customer cardHolder, Customer policyOwner, Date expirationDate) {
+    public InsuranceCard(String cardNumber, Customer cardHolder, String policyOwner, Date expirationDate) {
         this.cardNumber = cardNumber;
         this.cardHolder = cardHolder;
         this.policyOwner = policyOwner;
@@ -36,11 +36,11 @@ public class InsuranceCard {
         this.cardHolder = cardHolder;
     }
 
-    public Customer getPolicyOwner() {
+    public String getPolicyOwner() {
         return policyOwner;
     }
 
-    public void setPolicyOwner(Customer policyOwner) {
+    public void setPolicyOwner(String policyOwner) {
         this.policyOwner = policyOwner;
     }
 

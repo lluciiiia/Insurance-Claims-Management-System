@@ -3,9 +3,10 @@ package src;
 import src.ClaimProcessManager.ClaimProcessManager;
 import src.domain.Claim;
 
-import java.util.List;
+import java.util.*;
 
 public class util {
+    static Scanner scanner = new Scanner(System.in);
 
     public static void handleAddClaim(ClaimProcessManager claimProcessManager) {
         // TODO: Interact with the user to get information for the new claim
@@ -19,8 +20,29 @@ public class util {
 //        claimProcessManager.delete();
     }
 
-    public static void handleGetClaim(ClaimProcessManager claimProcessManager){
-//        claimProcessManager.getOne();
+    public static void handleGetClaim(ClaimProcessManager claimProcessManager) {
+
+        System.out.print("Enter the claim ID: ");
+        String claimId = scanner.nextLine();
+
+        if (isValidClaimId(claimId)) {
+            Claim claim = claimProcessManager.getOne(claimId);
+            System.out.println("Claim Information:");
+            System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.printf("%-15s %-20s %-15s %-20s %-15s %-15s %-10s %-30s %-20s%n",
+                    "ID", "Claim Date", "Insured Person", "Card Number", "Exam Date", "Claim Amount", "Status", "Receiver Banking Info", "Documents");
+            System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            claim.printClaim();
+        } else {
+            System.out.println("Invalid claim ID format. Please enter a valid claim ID (format: f**********).");
+        }
+
+    }
+
+    // Method to validate the format of the claim ID
+    private static boolean isValidClaimId(String claimId) {
+        // Check if the claim ID follows the specified format (f********** where * is a digit)
+        return claimId.matches("f\\d{10}");
     }
 
     public static void handleGetAllClaims(ClaimProcessManager claimProcessManager){

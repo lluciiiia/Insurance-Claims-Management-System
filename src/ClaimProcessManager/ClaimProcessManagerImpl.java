@@ -13,6 +13,10 @@ public class ClaimProcessManagerImpl implements ClaimProcessManager {
 
     @Override
     public void add(Claim claim) {
+        if (this.claims == null) {
+            this.claims = new ArrayList<Claim>();
+        }
+        this.claims.add(claim);
     }
 
     @Override
@@ -22,12 +26,20 @@ public class ClaimProcessManagerImpl implements ClaimProcessManager {
 
     @Override
     public void delete(String claimId) {
-        // Implement delete logic
+        if (this.claims != null) {
+            this.claims.removeIf(claim -> claim.getId().equals(claimId));
+        }
     }
 
     @Override
     public Claim getOne(String claimId) {
-        // Implement getOne logic
+        if (this.claims != null) {
+            for (Claim claim : this.claims) {
+                if (claim.getId().equals(claimId)) {
+                    return claim;
+                }
+            }
+        }
         return null;
     }
 

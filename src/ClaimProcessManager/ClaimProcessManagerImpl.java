@@ -3,8 +3,7 @@ package src.ClaimProcessManager;
  * @author <Seokyung Kim - s3939114>
  */
 
-import src.Claim;
-import src.ClaimProcessManager.ClaimProcessManager;
+import src.domain.Claim;
 
 import java.util.List;
 

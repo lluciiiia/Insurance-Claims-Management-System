@@ -1,6 +1,6 @@
 package src.FileManager;
 
-import src.*;
+import src.domain.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -24,29 +24,32 @@ public class FileManagerImpl implements FileManager{
     private List<Claim> claimList = new ArrayList<>();
 
     @Override
-    public boolean loadFiles() throws IOException {
+    public HashMap<String, List> loadFiles() throws IOException {
         loadCustomersFromFile();
         loadCustomerRelationshipsFromFile();
         loadInsuranceCardsFromFile();
-        System.out.println("Loaded Customers:");
-        for (Customer customer : customerList) {
-            customer.printCustomer();
-        }
+//        System.out.println("Loaded Customers:");
+//        for (Customer customer : customerList) {
+//            customer.printCustomer();
+//        }
         loadReceiverBankingInfoFromFile();
         loadClaimsFromFile();
 
-        System.out.println("Claims Information:");
-        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------");
-        System.out.printf("%-15s %-20s %-15s %-20s %-15s %-15s %-10s %-30s %-20s%n",
-                "ID", "Claim Date", "Insured Person", "Card Number", "Exam Date", "Claim Amount", "Status", "Receiver Banking Info", "Documents");
-        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------");
+//        System.out.println("Claims Information:");
+//        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------");
+//        System.out.printf("%-15s %-20s %-15s %-20s %-15s %-15s %-10s %-30s %-20s%n",
+//                "ID", "Claim Date", "Insured Person", "Card Number", "Exam Date", "Claim Amount", "Status", "Receiver Banking Info", "Documents");
+//        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------");
+//
+//        for (Claim claim: claimList) {
+//            claim.printClaim();
+//        }
 
-        for (Claim claim: claimList) {
-            claim.printClaim();
-        }
-
-
-        return true;
+        HashMap<String, List> objectList = new HashMap<>();
+        objectList.put("Customer", customerList);
+        objectList.put("InsuranceCard", insuranceCardList);
+        objectList.put("Claim", claimList);
+        return objectList;
     }
 
     @Override

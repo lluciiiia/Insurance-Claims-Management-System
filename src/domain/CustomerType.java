@@ -1,4 +1,4 @@
-package src;
+package src.domain;
 
 /*
  * @author <Seokyung Kim - s3939114>

@@ -1,8 +1,10 @@
-package src;
+package src.domain;
 
 /*
  * @author <Seokyung Kim - s3939114>
  */
+
+import src.domain.Customer;
 
 import java.util.Date;
 

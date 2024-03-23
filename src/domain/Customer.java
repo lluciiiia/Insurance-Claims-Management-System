@@ -1,10 +1,10 @@
-package src;
+package src.domain;
 
 /*
 * @author <Seokyung Kim - s3939114>
 */
 
-import static src.CustomerType.*;
+import static src.domain.CustomerType.*;
 
 import java.util.ArrayList;
 import java.util.List;

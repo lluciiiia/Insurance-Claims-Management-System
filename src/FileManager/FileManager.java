@@ -1,12 +1,11 @@
 package src.FileManager;
 
-import src.Claim;
-import src.Customer;
-import src.InsuranceCard;
+import src.domain.Claim;
+import src.domain.Customer;
+import src.domain.InsuranceCard;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 
 /*
@@ -16,7 +15,7 @@ import java.util.List;
 
 public interface FileManager {
 
-    public boolean loadFiles() throws IOException;
+    public HashMap<String, List> loadFiles() throws IOException;
 
     void loadReceiverBankingInfoFromFile() throws IOException;
 

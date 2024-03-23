@@ -5,7 +5,6 @@ import src.ClaimProcessManager.ClaimProcessManagerImpl;
 import src.FileManager.FileManager;
 import src.FileManager.FileManagerImpl;
 import src.domain.Claim;
-import src.util;
 
 import java.io.IOException;
 import java.util.*;
@@ -50,13 +49,17 @@ public class Application {
                     util.handleAddClaim(claimProcessManager);
                     break;
                 case 2:
-                    util.handleUpdateClaim(claimProcessManager);                    break;
+                    util.handleUpdateClaim(claimProcessManager);
+                    break;
                 case 3:
-                    util.handleDeleteClaim(claimProcessManager);                    break;
+                    util.handleDeleteClaim(claimProcessManager);
+                    break;
                 case 4:
-                    util.handleGetClaim(claimProcessManager);                    break;
+                    util.handleGetClaim(claimProcessManager);
+                    break;
                 case 5:
-                    util.handleGetAllClaims(claimProcessManager);                    break;
+                    util.handleGetAllClaims(claimProcessManager);
+                    break;
                 case 6:
                     System.out.println("Exiting...");
                     break;

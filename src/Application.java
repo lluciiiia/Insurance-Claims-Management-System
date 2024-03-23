@@ -4,6 +4,8 @@ import src.ClaimProcessManager.ClaimProcessManager;
 import src.ClaimProcessManager.ClaimProcessManagerImpl;
 import src.FileManager.FileManager;
 import src.FileManager.FileManagerImpl;
+import src.domain.Claim;
+import src.util;
 
 import java.io.IOException;
 import java.util.*;
@@ -45,20 +47,16 @@ public class Application {
 
             switch (choice) {
                 case 1:
-//                    claimProcessManager.add();
+                    util.handleAddClaim(claimProcessManager);
                     break;
                 case 2:
-//                    claimProcessManager.update();
-                    break;
+                    util.handleUpdateClaim(claimProcessManager);                    break;
                 case 3:
-//                    claimProcessManager.delete();
-                    break;
+                    util.handleDeleteClaim(claimProcessManager);                    break;
                 case 4:
-//                    claimProcessManager.getOne();
-                    break;
+                    util.handleGetClaim(claimProcessManager);                    break;
                 case 5:
-//                    claimProcessManager.getAll();
-                    break;
+                    util.handleGetAllClaims(claimProcessManager);                    break;
                 case 6:
                     System.out.println("Exiting...");
                     break;
@@ -74,6 +72,12 @@ public class Application {
         ClaimProcessManager claimProcessManager = new ClaimProcessManagerImpl();
         FileManager fileManager = new FileManagerImpl();
         HashMap<String, List> objectList = fileManager.loadFiles();
+        List<Claim> claims = objectList.get("Claim");
+
+        // Add claims to the ClaimProcessManager
+        for (Claim claim : claims) {
+            claimProcessManager.add(claim);
+        }
 
         // Initialize Application with ClaimProcessManager and FileManager
         Application application = new Application(claimProcessManager, fileManager);

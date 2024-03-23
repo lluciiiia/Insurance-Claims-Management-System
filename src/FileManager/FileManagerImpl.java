@@ -35,16 +35,6 @@ public class FileManagerImpl implements FileManager{
         loadReceiverBankingInfoFromFile();
         loadClaimsFromFile();
 
-//        System.out.println("Claims Information:");
-//        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------");
-//        System.out.printf("%-15s %-20s %-15s %-20s %-15s %-15s %-10s %-30s %-20s%n",
-//                "ID", "Claim Date", "Insured Person", "Card Number", "Exam Date", "Claim Amount", "Status", "Receiver Banking Info", "Documents");
-//        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------");
-//
-//        for (Claim claim: claimList) {
-//            claim.printClaim();
-//        }
-
         HashMap<String, List> objectList = new HashMap<>();
         objectList.put("Customer", customerList);
         objectList.put("InsuranceCard", insuranceCardList);

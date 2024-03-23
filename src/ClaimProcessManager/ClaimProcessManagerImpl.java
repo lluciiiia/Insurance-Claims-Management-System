@@ -5,6 +5,7 @@ package src.ClaimProcessManager;
 
 import src.domain.Claim;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClaimProcessManagerImpl implements ClaimProcessManager {
@@ -12,6 +13,9 @@ public class ClaimProcessManagerImpl implements ClaimProcessManager {
 
     @Override
     public void add(Claim claim) {
+        if (this.claims == null) {
+            this.claims = new ArrayList<Claim>();
+        }
         claims.add(claim);
     }
 

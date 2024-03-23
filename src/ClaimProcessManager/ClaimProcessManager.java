@@ -12,7 +12,7 @@ public interface ClaimProcessManager {
 
     void update(Claim claim);
 
-    void delete(String claimId);
+    boolean delete(String claimId);
 
     Claim getOne(String claimId);
 

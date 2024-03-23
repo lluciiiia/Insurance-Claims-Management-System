@@ -25,10 +25,12 @@ public class ClaimProcessManagerImpl implements ClaimProcessManager {
     }
 
     @Override
-    public void delete(String claimId) {
+    public boolean delete(String claimId) {
         if (this.claims != null) {
             this.claims.removeIf(claim -> claim.getId().equals(claimId));
+            return true;
         }
+        return false;
     }
 
     @Override

@@ -17,12 +17,23 @@ public class util {
     }
 
     public static void handleDeleteClaim(ClaimProcessManager claimProcessManager){
-//        claimProcessManager.delete();
+        System.out.print("Enter the claim ID to delete: ");
+        String claimId = scanner.nextLine();
+
+        if (isValidClaimId(claimId)) {
+            if (claimProcessManager.delete(claimId)) {
+                System.out.println("The claim with ID " + claimId + " has been successfully deleted.");
+            } else {
+                System.out.println("Error: The claim with ID " + claimId + " does not exist.");
+            }
+        } else {
+            System.out.println("Error: Invalid claim ID format.");
+        }
     }
 
     public static void handleGetClaim(ClaimProcessManager claimProcessManager) {
 
-        System.out.print("Enter the claim ID: ");
+        System.out.print("Enter the claim ID to get: ");
         String claimId = scanner.nextLine();
 
         if (isValidClaimId(claimId)) {

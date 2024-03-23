@@ -13,11 +13,13 @@ import java.util.*;
  * @author <Seokyung Kim - s3939114>
  */
 public class Application {
+    private HashMap<String, List<?>> dataMap;
     private final ClaimProcessManager claimProcessManager;
     private final FileManager fileManager;
 
-    public Application(ClaimProcessManager claimProcessManager, FileManager fileManager) {
+    public Application(ClaimProcessManager claimProcessManager, HashMap<String, List<?>> dataMap, FileManager fileManager) {
         this.claimProcessManager = claimProcessManager;
+        this.dataMap = dataMap;
         this.fileManager = fileManager;
     }
 
@@ -62,6 +64,7 @@ public class Application {
                     break;
                 case 6:
                     System.out.println("Exiting...");
+                    saveDataAndExit();
                     break;
                 default:
                     System.out.println("Invalid choice. Please enter a number between 1 and 6.");
@@ -70,20 +73,30 @@ public class Application {
 
         scanner.close();
     }
+
+    private void saveDataAndExit() {
+        try {
+            // Save all data to files using FileManager
+            fileManager.saveFiles((HashMap<String, List<?>>) dataMap);
+        } catch (IOException e) {
+            System.out.println("An error occurred while saving data: " + e.getMessage());
+        }
+
+        System.out.println("Exiting...");
+    }
+
     public static void main(String[] args) throws IOException {
         // Initialize ClaimProcessManager and FileManager
         ClaimProcessManager claimProcessManager = new ClaimProcessManagerImpl();
         FileManager fileManager = new FileManagerImpl();
-        HashMap<String, List> objectList = fileManager.loadFiles();
-        List<Claim> claims = objectList.get("Claim");
+        HashMap<String, List<?>> dataMap = fileManager.loadFiles();
 
-        // Add claims to the ClaimProcessManager
-        for (Claim claim : claims) {
-            claimProcessManager.add(claim);
-        }
+        // Retrieve claims from dataMap and add them to ClaimProcessManager
+        List<Claim> claims = (List<Claim>) dataMap.get("Claim");
+        claimProcessManager.addAll(claims);
 
         // Initialize Application with ClaimProcessManager and FileManager
-        Application application = new Application(claimProcessManager, fileManager);
+        Application application = new Application(claimProcessManager, dataMap, fileManager);
 
         // Start the text-based user interface
         application.start();

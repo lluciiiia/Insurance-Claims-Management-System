@@ -17,4 +17,6 @@ public interface ClaimProcessManager {
     Claim getOne(String claimId);
 
     List<Claim> getAll();
+
+    void addAll(List<Claim> claims);
 }

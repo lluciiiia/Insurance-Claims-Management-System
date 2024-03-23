@@ -24,22 +24,22 @@ public class FileManagerImpl implements FileManager{
     private List<Claim> claimList = new ArrayList<>();
 
     @Override
-    public HashMap<String, List> loadFiles() throws IOException {
+    public HashMap<String, List<?>> loadFiles() throws IOException {
         loadCustomersFromFile();
         loadCustomerRelationshipsFromFile();
         loadInsuranceCardsFromFile();
-//        System.out.println("Loaded Customers:");
-//        for (Customer customer : customerList) {
-//            customer.printCustomer();
-//        }
+////        System.out.println("Loaded Customers:");
+////        for (Customer customer : customerList) {
+////            customer.printCustomer();
+////        }
         loadReceiverBankingInfoFromFile();
         loadClaimsFromFile();
+        HashMap<String, List<?>> dataMap = new HashMap<>();
+        dataMap.put("Customer", customerList);
+        dataMap.put("InsuranceCard", insuranceCardList);
+        dataMap.put("Claim", claimList);
 
-        HashMap<String, List> objectList = new HashMap<>();
-        objectList.put("Customer", customerList);
-        objectList.put("InsuranceCard", insuranceCardList);
-        objectList.put("Claim", claimList);
-        return objectList;
+        return dataMap;
     }
 
     @Override
@@ -166,6 +166,11 @@ public class FileManagerImpl implements FileManager{
         }
 
         return claimList;
+    }
+
+    @Override
+    public void saveFiles(HashMap<String, List<?>> objectList) throws IOException {
+        // Implement saving data to files
     }
 
 }

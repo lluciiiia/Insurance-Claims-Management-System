@@ -13,10 +13,6 @@ public class ClaimProcessManagerImpl implements ClaimProcessManager {
 
     @Override
     public void add(Claim claim) {
-        if (this.claims == null) {
-            this.claims = new ArrayList<Claim>();
-        }
-        claims.add(claim);
     }
 
     @Override
@@ -38,5 +34,11 @@ public class ClaimProcessManagerImpl implements ClaimProcessManager {
     @Override
     public List<Claim> getAll() {
         return claims;
+    }
+
+    @Override
+    public void addAll(List<Claim> claims) {
+        this.claims = new ArrayList<Claim>();
+        this.claims.addAll(claims);
     }
 }

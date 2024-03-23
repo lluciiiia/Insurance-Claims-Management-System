@@ -5,6 +5,8 @@ package src;
 */
 
 import static src.CustomerType.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Customer {
@@ -71,8 +73,15 @@ public class Customer {
         return claims;
     }
 
-    public void setClaims(List<Claim> claims) {
-        this.claims = claims;
+//    public void setClaims(List<Claim> claims) {
+//        this.claims = claims;
+//    }
+
+    public void addClaim(Claim claim) {
+        if (this.claims == null) {
+            this.claims = new ArrayList<Claim>();
+        }
+        this.claims.add(claim);
     }
 
     public CustomerType getCustomerType() { return customerType; }

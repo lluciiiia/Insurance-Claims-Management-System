@@ -3,13 +3,15 @@ package src;
  * @author <Seokyung Kim - s3939114>
  */
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 public class Claim {
     private String id;
     private Date claimDate;
-    private String insuredPerson;
+    private Customer insuredPerson;
     private String cardNumber;
     private Date examDate;
     private List<String> documents;
@@ -17,7 +19,9 @@ public class Claim {
     private ClaimStatus status;
     private ReceiverBankingInfo receiverBankingInfo;
 
-    public Claim(String id, Date claimDate, String insuredPerson, String cardNumber, Date examDate,
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    public Claim(String id, Date claimDate, Customer insuredPerson, String cardNumber, Date examDate,
             List<String> documents, double claimAmount, ClaimStatus status,
             ReceiverBankingInfo receiverBankingInfo) {
         this.id = id;
@@ -48,11 +52,11 @@ public class Claim {
         this.claimDate = claimDate;
     }
 
-    public String getInsuredPerson() {
+    public Customer getInsuredPerson() {
         return insuredPerson;
     }
 
-    public void setInsuredPerson(String insuredPerson) {
+    public void setInsuredPerson(Customer insuredPerson) {
         this.insuredPerson = insuredPerson;
     }
 
@@ -103,4 +107,17 @@ public class Claim {
     public void setReceiverBankingInfo(ReceiverBankingInfo receiverBankingInfo) {
         this.receiverBankingInfo = receiverBankingInfo;
     }
+
+    public void printClaim() {
+        String formattedClaimDate = dateFormat.format(this.getClaimDate());
+        String formattedExamDate = dateFormat.format(this.getExamDate());
+
+
+            System.out.printf("%-15s %-20s %-15s %-20s %-15s %-15s %-20s %-15s %-20s%n",
+                    this.getId(), formattedClaimDate, this.getInsuredPerson().getId(),
+                    this.getCardNumber(), formattedExamDate, this.getClaimAmount(),
+                    this.getStatus(), this.getReceiverBankingInfo().getId(), this.getDocuments());
+    }
+
+
 }

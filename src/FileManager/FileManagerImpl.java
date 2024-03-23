@@ -14,10 +14,14 @@ public class FileManagerImpl implements FileManager{
     private final Path RECEIVER_BANKING_INFO_FILE = Paths.get("src/data/receiver_banking_info.txt");
     private final Path CLAIMS_FILE = Paths.get("src/data/claims.txt");
 
-    private List<Customer> customers = new ArrayList<>();
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    private List<Customer> customerList = new ArrayList<>();
     private HashMap<String, Customer> customersMap = new HashMap<>();
-    private List<InsuranceCard> insuranceCards = new ArrayList<>();
-    private List<ReceiverBankingInfo> receiverBankingInfos = new ArrayList<>();
+    private List<InsuranceCard> insuranceCardList = new ArrayList<>();
+    private List<ReceiverBankingInfo> receiverBankingInfoList = new ArrayList<>();
+    private HashMap<String, ReceiverBankingInfo> receiverBankingInfoHashMap = new HashMap<>();
+    private List<Claim> claimList = new ArrayList<>();
 
     @Override
     public boolean loadFiles() throws IOException {
@@ -25,11 +29,23 @@ public class FileManagerImpl implements FileManager{
         loadCustomerRelationshipsFromFile();
         loadInsuranceCardsFromFile();
         System.out.println("Loaded Customers:");
-        for (Customer customer : customers) {
+        for (Customer customer : customerList) {
             customer.printCustomer();
         }
         loadReceiverBankingInfoFromFile();
         loadClaimsFromFile();
+
+        System.out.println("Claims Information:");
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%-15s %-20s %-15s %-20s %-15s %-15s %-10s %-30s %-20s%n",
+                "ID", "Claim Date", "Insured Person", "Card Number", "Exam Date", "Claim Amount", "Status", "Receiver Banking Info", "Documents");
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+        for (Claim claim: claimList) {
+            claim.printClaim();
+        }
+
+
         return true;
     }
 
@@ -43,11 +59,11 @@ public class FileManagerImpl implements FileManager{
                 String fullName = parts[1];
                 CustomerType customerType = CustomerType.valueOf(parts[2]);
                 Customer customer = new Customer(id, fullName, customerType);
-                customers.add(customer);
+                customerList.add(customer);
                 customersMap.put(id, customer);
             }
         }
-        return customers;
+        return customerList;
     }
 
     @Override
@@ -83,7 +99,6 @@ public class FileManagerImpl implements FileManager{
                 String dependentId = parts[1];
                 String policyOwner = parts[2];
                 String dateString = parts[3];
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date expirationDate = dateFormat.parse(dateString);
 
                 Customer dependent = customersMap.get(dependentId);
@@ -91,12 +106,12 @@ public class FileManagerImpl implements FileManager{
                 InsuranceCard insuranceCard = new InsuranceCard(cardNumber, dependent, policyOwner, expirationDate);
                 dependent.setInsuranceCard(insuranceCard);
 
-                insuranceCards.add(insuranceCard);
+                insuranceCardList.add(insuranceCard);
             }
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        return insuranceCards;
+        return insuranceCardList;
     }
 
 
@@ -106,19 +121,58 @@ public class FileManagerImpl implements FileManager{
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                String bank = parts[0];
-                String insuredCustomerId = parts[1];
-                String number = parts[2];
+                String id = parts[0];
+                String bank = parts[1];
+                String insuredCustomerId = parts[2];
+                String number = parts[3];
 
                 String insuredCustomerName = customersMap.get(insuredCustomerId).getFullName();
-                ReceiverBankingInfo receiverBankingInfo = new ReceiverBankingInfo(bank, insuredCustomerName, number);
-                receiverBankingInfos.add(receiverBankingInfo);
+                ReceiverBankingInfo receiverBankingInfo = new ReceiverBankingInfo(id, bank, insuredCustomerName, number);
+                receiverBankingInfoList.add(receiverBankingInfo);
+                receiverBankingInfoHashMap.put(id, receiverBankingInfo);
             }
         }
     }
 
     @Override
     public List<Claim> loadClaimsFromFile() {
-        return null;
+
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(CLAIMS_FILE.toFile()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                String id = parts[0];
+                Date claimDate = dateFormat.parse(parts[1]);
+                String insuredPersonId = parts[2];
+                String cardNumber = parts[3];
+                Date examDate = dateFormat.parse(parts[4]);
+                List<String> documentList = Arrays.asList(parts[5].split(";")); // Splitting documents
+                double claimAmount = Double.parseDouble(parts[6]);
+                ClaimStatus status = ClaimStatus.valueOf(parts[7]);
+                String receiverBankingInfoId = parts[8];
+
+                ReceiverBankingInfo receiverBankingInfo = receiverBankingInfoHashMap.get(receiverBankingInfoId);
+                if (receiverBankingInfo == null) {
+                    throw new IllegalArgumentException("Receiver Banking Info not found for card number: " + cardNumber);
+                }
+
+                Customer insuredPerson = customersMap.get(insuredPersonId);
+                if (insuredPerson == null) {
+                    throw new IllegalArgumentException("Insured Person (Customer) not found for ID: " + insuredPersonId);
+                }
+
+                Claim claim = new Claim(id, claimDate, insuredPerson, cardNumber, examDate, documentList, claimAmount, status, receiverBankingInfo);
+
+                insuredPerson.addClaim(claim);
+
+                claimList.add(claim);
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        return claimList;
     }
+
 }

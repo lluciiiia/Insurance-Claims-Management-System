@@ -1,10 +1,7 @@
 package src;
 
 import src.ClaimProcessManager.ClaimProcessManager;
-import src.domain.Claim;
-import src.domain.ClaimStatus;
-import src.domain.Customer;
-import src.domain.ReceiverBankingInfo;
+import src.domain.*;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -56,9 +53,20 @@ public class util {
         } while (insuredPerson == null);
 
 
+        HashMap<String, InsuranceCard> insuranceCardsMap = (HashMap<String, InsuranceCard>) dataMap.get("InsuranceCard");
         System.out.print("Card Number: ");
-        // TODO: validate if the card number exists in the insurance card, if it doesn't, ask the user to input until it exists.
-        String cardNumber = scanner.nextLine();
+        String cardNumber;
+        InsuranceCard insuranceCard;
+
+        do {
+            cardNumber = scanner.nextLine();
+            insuranceCard = insuranceCardsMap.get(cardNumber);
+            if (insuranceCard == null) {
+                System.out.println("Card Number " + cardNumber + " not found. Please enter a valid card number.");
+                System.out.print("Card Number: ");
+            }
+        } while (insuranceCard == null);
+
 
         Date examDate;
         do {

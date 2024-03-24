@@ -85,13 +85,13 @@ public class util {
             System.out.print("Documents (separated by comma): ");
             String documentsStr = scanner.nextLine();
             documents = Arrays.asList(documentsStr.split(","));
-        } while (!isValidDocuments(documents));
+        } while (!isValidDocuments(claimId, cardNumber, documents));
 
         double claimAmount;
         do {
             System.out.print("Claim Amount: ");
             claimAmount = scanner.nextDouble();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
         } while (claimAmount < 0);
 
         ClaimStatus status;
@@ -106,18 +106,16 @@ public class util {
 
         ReceiverBankingInfo receiverBankingInfo = getReceiverBankingInfoFromUser(dataMap);
 
-        // Create the claim object
         Claim claim = new Claim(claimId, claimDate, insuredPerson, cardNumber, examDate, documents, claimAmount, status, receiverBankingInfo);
 
-        // Add the claim to the ClaimProcessManager
         claimProcessManager.add(claim);
 
         System.out.println("New claim added successfully!");
     }
 
-    private static boolean isValidDocuments(List<String> documents) {
+    private static boolean isValidDocuments(String claimId, String cardNumber, List<String> documents) {
         for (String document : documents) {
-            if (!isValidDocumentName(document)) {
+            if (!isValidDocumentName(claimId, cardNumber, document)) {
                 System.out.println("Invalid document name format. Document names should follow the format: ClaimId_CardNumber_DocumentName.pdf");
                 return false;
             }
@@ -125,16 +123,32 @@ public class util {
         return true;
     }
 
-    private static boolean isValidDocumentName(String document) {
-        // TODO: Validate if the claim and cardNumber match and exist
+    private static boolean isValidDocumentName(String claimId, String cardNumber, String document) {
         // Document name format: ClaimId_CardNumber_DocumentName.pdf
         String[] parts = document.split("_");
+
+        // Check if the document name contains three parts
         if (parts.length != 3) {
             return false;
         }
-        String[] fileNameParts = parts[2].split("\\.");
+
+        // Extract claim ID and card number from the document name
+        String documentClaimId = parts[0];
+        String documentCardNumber = parts[1];
+
+        // Check if the claim ID and card number match the provided claim ID and card number
+        if (!documentClaimId.equals(claimId) || !documentCardNumber.equals(cardNumber)) {
+            return false;
+        }
+
+        // Extract the file extension
+        String documentName = parts[2];
+        String[] fileNameParts = documentName.split("\\.");
+
+        // Check if the file name consists of two parts and the extension is "pdf"
         return fileNameParts.length == 2 && fileNameParts[1].equalsIgnoreCase("pdf");
     }
+
 
 
     public static ReceiverBankingInfo getReceiverBankingInfoFromUser(HashMap<String, HashMap<String, ?>> dataMap) {

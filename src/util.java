@@ -18,90 +18,126 @@ public class util {
     public static void handleAddClaim(ClaimProcessManager claimProcessManager, HashMap<String, HashMap<String, ?>> dataMap) {
         System.out.println("Enter the following information for the new claim:");
 
-        System.out.print("Claim ID (format: f**********): ");
-        String claimId = scanner.nextLine();
-        // TODO: handle the duplicated Id
-        if (!isValidClaimId(claimId)) {
-            System.out.println("Invalid claim ID format. Please enter a valid claim ID (format: f**********).");
-        }
+        String claimId;
+        do {
+            System.out.print("Claim ID (format: f**********): ");
+            claimId = scanner.nextLine();
+            if (!isValidClaimId(claimId)) {
+                System.out.println("Invalid claim ID format. Please enter a valid claim ID (format: f**********).");
+            }
+        } while (!isValidClaimId(claimId));
 
-        Date claimDate = null;
-        try {
+        Date claimDate;
+        do {
             System.out.print("Claim Date (yyyy-MM-dd): ");
             String claimDateStr = scanner.nextLine();
-            claimDate = dateFormat.parse(claimDateStr);
-        } catch (ParseException e) {
-            System.out.println("Invalid date format. Please enter date in yyyy-MM-dd format.");
-            return;
-        }
+            try {
+                claimDate = dateFormat.parse(claimDateStr);
+            } catch (ParseException e) {
+                System.out.println("Invalid date format. Please enter date in yyyy-MM-dd format.");
+                claimDate = null;
+            }
+        } while (claimDate == null);
 
-        System.out.print("Insured Person ID: ");
-        String insuredPersonId = scanner.nextLine();
 
         HashMap<String, Customer> customerHashMap = (HashMap<String, Customer>) dataMap.get("Customer");
-        Customer insuredPerson = customerHashMap.get(insuredPersonId);
-        if (insuredPerson == null) {
-            System.out.println("Insured Person with ID " + insuredPersonId + " not found.");
-            return;
-        }
+
+        System.out.print("Insured Person ID: ");
+        String insuredPersonId;
+        Customer insuredPerson;
+
+        do {
+            insuredPersonId = scanner.nextLine();
+            insuredPerson = customerHashMap.get(insuredPersonId);
+            if (insuredPerson == null) {
+                System.out.println("Insured Person with ID " + insuredPersonId + " not found. Please enter a valid ID.");
+                System.out.print("Insured Person ID: ");
+            }
+        } while (insuredPerson == null);
+
 
         System.out.print("Card Number: ");
-        String cardNumber = scanner.nextLine(); // Assuming the user enters a valid card number
+        // TODO: validate if the card number exists in the insurance card, if it doesn't, ask the user to input until it exists.
+        String cardNumber = scanner.nextLine();
 
-        Date examDate = null;
-        try {
+        Date examDate;
+        do {
             System.out.print("Exam Date (yyyy-MM-dd): ");
             String examDateStr = scanner.nextLine();
-            examDate = dateFormat.parse(examDateStr);
-        } catch (ParseException e) {
-            System.out.println("Invalid date format. Please enter date in yyyy-MM-dd format.");
-            return;
-        }
+            try {
+                examDate = dateFormat.parse(examDateStr);
+            } catch (ParseException e) {
+                System.out.println("Invalid date format. Please enter date in yyyy-MM-dd format.");
+                examDate = null;
+            }
+        } while (examDate == null);
 
-        System.out.print("Documents (separated by comma): ");
-        String documentsStr = scanner.nextLine();
-        List<String> documents = Arrays.asList(documentsStr.split(","));
+        List<String> documents;
+        do {
+            System.out.print("Documents (separated by comma): ");
+            String documentsStr = scanner.nextLine();
+            documents = Arrays.asList(documentsStr.split(","));
+        } while (!isValidDocuments(documents));
 
-        System.out.print("Claim Amount: ");
-        double claimAmount = scanner.nextDouble();
-        scanner.nextLine(); // Consume newline character
+        double claimAmount;
+        do {
+            System.out.print("Claim Amount: ");
+            claimAmount = scanner.nextDouble();
+            scanner.nextLine(); // Consume newline
+        } while (claimAmount < 0);
 
-        System.out.print("Claim Status (NEW, PROCESSING, DONE): ");
-        String statusStr = scanner.nextLine().toUpperCase();
-        if (!isValidClaimStatus(statusStr)) {
-            System.out.println("Invalid claim status. Please enter either NEW, PROCESSING, or DONE.");
-        }
-        ClaimStatus status = ClaimStatus.valueOf(statusStr);
+        ClaimStatus status;
+        do {
+            System.out.print("Claim Status (NEW, PROCESSING, DONE): ");
+            String statusStr = scanner.nextLine().toUpperCase();
+            status = ClaimStatus.valueOfOrDefault(statusStr, null);
+            if (status == null) {
+                System.out.println("Invalid claim status. Please enter either NEW, PROCESSING, or DONE.");
+            }
+        } while (status == null);
 
-        // Get Receiver Banking Info
-        HashMap<String, ReceiverBankingInfo> receiverBankingInfoHashMap = (HashMap<String, ReceiverBankingInfo>) dataMap.get("ReceiverBankingInfo");
-        ReceiverBankingInfo receiverBankingInfo = getReceiverBankingInfoFromUser(receiverBankingInfoHashMap);
+        ReceiverBankingInfo receiverBankingInfo = getReceiverBankingInfoFromUser(dataMap);
 
         // Create the claim object
         Claim claim = new Claim(claimId, claimDate, insuredPerson, cardNumber, examDate, documents, claimAmount, status, receiverBankingInfo);
 
         // Add the claim to the ClaimProcessManager
         claimProcessManager.add(claim);
-        
+
         System.out.println("New claim added successfully!");
     }
 
-    public static ReceiverBankingInfo getReceiverBankingInfoFromUser(HashMap<String, ReceiverBankingInfo> receiverBankingInfoMap) {
-        Scanner scanner = new Scanner(System.in);
+    private static boolean isValidDocuments(List<String> documents) {
+        for (String document : documents) {
+            if (!isValidDocumentName(document)) {
+                System.out.println("Invalid document name format. Document names should follow the format: ClaimId_CardNumber_DocumentName.pdf");
+                return false;
+            }
+        }
+        return true;
+    }
 
-        // Display prompt and get receiver banking info ID from user
+    private static boolean isValidDocumentName(String document) {
+        // TODO: Validate if the claim and cardNumber match and exist
+        // Document name format: ClaimId_CardNumber_DocumentName.pdf
+        String[] parts = document.split("_");
+        if (parts.length != 3) {
+            return false;
+        }
+        String[] fileNameParts = parts[2].split("\\.");
+        return fileNameParts.length == 2 && fileNameParts[1].equalsIgnoreCase("pdf");
+    }
+
+
+    public static ReceiverBankingInfo getReceiverBankingInfoFromUser(HashMap<String, HashMap<String, ?>> dataMap) {
         System.out.print("Enter Receiver Banking Info ID: ");
         String receiverBankingInfoId = scanner.nextLine();
-
-        // Check if the entered ID exists in the receiver banking info map
+        HashMap<String, ReceiverBankingInfo> receiverBankingInfoMap = (HashMap<String, ReceiverBankingInfo>) dataMap.get("ReceiverBankingInfo");
         ReceiverBankingInfo receiverBankingInfo = receiverBankingInfoMap.get(receiverBankingInfoId);
         if (receiverBankingInfo == null) {
-            // If the ID does not exist, inform the user and return null
             System.out.println("Receiver Banking Info ID not found. Please enter a valid ID.");
             return null;
         }
-
-        // Return the ReceiverBankingInfo object corresponding to the entered ID
         return receiverBankingInfo;
     }
 

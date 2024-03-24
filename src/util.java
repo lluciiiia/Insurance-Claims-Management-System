@@ -80,6 +80,7 @@ public class util {
             }
         } while (examDate == null);
 
+        // TODO: automatic claimId and cardNumber?
         List<String> documents;
         do {
             System.out.print("Documents (ClaimId_CardNumber_DocumentName.pdf) (separated by comma): ");
@@ -175,9 +176,161 @@ public class util {
 
 
 
-    public static void handleUpdateClaim(ClaimProcessManager claimProcessManager) {
-//        claimProcessManager.update();
+    public static void handleUpdateClaim(ClaimProcessManager claimProcessManager, HashMap<String, HashMap<String, ?>> dataMap) {
+        System.out.println("Enter the claim ID to update: ");
+        String claimId = scanner.nextLine();
+
+        Claim claimToUpdate = claimProcessManager.getOne(claimId);
+        if (claimToUpdate == null) {
+            System.out.println("Claim with ID " + claimId + " not found.");
+            return;
+        }
+        System.out.println("Claim Information:");
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%-15s %-20s %-15s %-20s %-15s %-15s %-10s %-30s %-20s%n",
+                "ID", "Claim Date", "Insured Person", "Card Number", "Exam Date", "Claim Amount", "Status", "Receiver Banking Info", "Documents");
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        claimToUpdate.printClaim();
+
+        System.out.println("Choose the field to update:");
+        System.out.println("1. Claim Date");
+        System.out.println("2. Insured Person");
+        System.out.println("3. Card Number");
+        System.out.println("4. Exam Date");
+        System.out.println("5. Documents");
+        System.out.println("6. Claim Amount");
+        System.out.println("7. Claim Status");
+        System.out.println("8. Receiver Banking Info");
+        System.out.print("Enter your choice: ");
+
+        int choice = 0;
+        while (choice < 1 || choice > 8) {
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+                if (choice < 1 || choice > 8) {
+                    System.out.println("Invalid choice. Please enter a number between 1 and 8.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
+            }
+        }
+
+        // Switch case to handle each choice
+        switch (choice) {
+            case 1:
+                Date newClaimDate = null;
+                while (newClaimDate == null) {
+                    try {
+                        System.out.print("Enter new claim date (yyyy-MM-dd): ");
+                        String claimDateStr = scanner.nextLine();
+                        newClaimDate = dateFormat.parse(claimDateStr);
+                    } catch (ParseException e) {
+                        System.out.println("Invalid date format. Please enter date in yyyy-MM-dd format.");
+                    }
+                }
+                claimToUpdate.setClaimDate(newClaimDate);
+                break;
+            case 2:
+                Customer newInsuredPerson = null;
+                while (newInsuredPerson == null) {
+                    System.out.print("Enter new Insured Person ID: ");
+                    String newInsuredPersonId = scanner.nextLine();
+                    HashMap<String, Customer> customerHashMap = (HashMap<String, Customer>) dataMap.get("Customer");
+                    newInsuredPerson = customerHashMap.get(newInsuredPersonId);
+                    if (newInsuredPerson == null) {
+                        System.out.println("Insured Person with ID " + newInsuredPersonId + " not found.");
+                    }
+                }
+                claimToUpdate.setInsuredPerson(newInsuredPerson);
+                break;
+            case 3:
+                InsuranceCard newInsuranceCard = null;
+                String newCardNumber = null;
+                while (newInsuranceCard == null) {
+                    System.out.print("Enter new card number: ");
+                    newCardNumber = scanner.nextLine();
+                    HashMap<String, InsuranceCard> insuranceCardsMap = (HashMap<String, InsuranceCard>) dataMap.get("InsuranceCard");
+                    newInsuranceCard = insuranceCardsMap.get(newCardNumber);
+                    if (newInsuranceCard == null) {
+                        System.out.println("Card Number " + newCardNumber + " not found. Please enter a valid card number.");
+                        System.out.print("Card Number: ");
+                    }
+                }
+                claimToUpdate.setCardNumber(newCardNumber);
+                break;
+            case 4:
+                Date newExamDate = null;
+                while (newExamDate == null) {
+                    try {
+                        System.out.print("Enter new exam date (yyyy-MM-dd): ");
+                        String examDateStr = scanner.nextLine();
+                        newExamDate = dateFormat.parse(examDateStr);
+                    } catch (ParseException e) {
+                        System.out.println("Invalid date format. Please enter date in yyyy-MM-dd format.");
+                    }
+                }
+                claimToUpdate.setExamDate(newExamDate);
+                break;
+            case 5:
+                List<String> newDocuments = null;
+                String cardNumber = claimToUpdate.getCardNumber();
+                do {
+                    System.out.print("Enter new documents (ClaimId_CardNumber_DocumentName.pdf) (separated by comma): ");
+                    String documentsStr = scanner.nextLine();
+                    newDocuments = Arrays.asList(documentsStr.split(","));
+                } while (!isValidDocuments(claimId, cardNumber, newDocuments));
+                claimToUpdate.setDocuments(newDocuments);
+                break;
+            case 6:
+                double newClaimAmount = 0;
+                while (newClaimAmount <= 0) {
+                    System.out.print("Enter new claim amount: ");
+                    try {
+                        newClaimAmount = Double.parseDouble(scanner.nextLine());
+                        if (newClaimAmount <= 0) {
+                            System.out.println("Claim amount must be greater than zero.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input. Please enter a valid number.");
+                    }
+                }
+                claimToUpdate.setClaimAmount(newClaimAmount);
+                break;
+            case 7:
+                ClaimStatus newStatus = null;
+                while (newStatus == null) {
+                    System.out.print("Enter new claim status (NEW, PROCESSING, DONE): ");
+                    String newStatusStr = scanner.nextLine().toUpperCase();
+                    if (!isValidClaimStatus(newStatusStr)) {
+                        System.out.println("Invalid claim status. Please enter either NEW, PROCESSING, or DONE.");
+                    } else {
+                        newStatus = ClaimStatus.valueOf(newStatusStr);
+                    }
+                }
+                claimToUpdate.setStatus(newStatus);
+                break;
+            case 8:
+                ReceiverBankingInfo newReceiverBankingInfo = null;
+                while (newReceiverBankingInfo == null) {
+                    System.out.print("Enter new Receiver Banking Info ID: ");
+                    String newReceiverBankingInfoId = scanner.nextLine();
+                    HashMap<String, ReceiverBankingInfo> receiverBankingInfoHashMap = (HashMap<String, ReceiverBankingInfo>) dataMap.get("ReceiverBankingInfo");
+                    newReceiverBankingInfo = receiverBankingInfoHashMap.get(newReceiverBankingInfoId);
+                    if (newReceiverBankingInfo == null) {
+                        System.out.println("Receiver Banking Info ID not found. Please enter a valid ID.");
+                    }
+                }
+                claimToUpdate.setReceiverBankingInfo(newReceiverBankingInfo);
+                break;
+            default:
+                System.out.println("Invalid choice. Please enter a number between 1 and 8.");
+                return;
+        }
+
+        claimProcessManager.update(claimToUpdate);
+        System.out.println("Claim updated successfully!");
     }
+
 
     public static void handleDeleteClaim(ClaimProcessManager claimProcessManager){
         System.out.print("Enter the claim ID to delete: ");

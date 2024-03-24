@@ -52,7 +52,7 @@ public class Application {
                     util.handleAddClaim(claimProcessManager, dataMap);
                     break;
                 case 2:
-                    util.handleUpdateClaim(claimProcessManager);
+                    util.handleUpdateClaim(claimProcessManager, dataMap);
                     break;
                 case 3:
                     util.handleDeleteClaim(claimProcessManager);

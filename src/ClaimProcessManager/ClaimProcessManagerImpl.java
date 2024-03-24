@@ -5,18 +5,17 @@ package src.ClaimProcessManager;
 
 import src.domain.Claim;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ClaimProcessManagerImpl implements ClaimProcessManager {
-    private List<Claim> claims;
+    private HashMap<String, Claim> claims;
 
     @Override
     public void add(Claim claim) {
         if (this.claims == null) {
-            this.claims = new ArrayList<Claim>();
+            this.claims = new HashMap<String, Claim>();
         }
-        this.claims.add(claim);
+        this.claims.put(claim.getId(), claim);
     }
 
     @Override
@@ -26,8 +25,9 @@ public class ClaimProcessManagerImpl implements ClaimProcessManager {
 
     @Override
     public boolean delete(String claimId) {
-        if (this.claims != null) {
-            this.claims.removeIf(claim -> claim.getId().equals(claimId));
+        Claim claim = claims.get(claimId);
+        if (claim != null) {
+            claims.remove(claimId);
             return true;
         }
         return false;
@@ -35,24 +35,21 @@ public class ClaimProcessManagerImpl implements ClaimProcessManager {
 
     @Override
     public Claim getOne(String claimId) {
-        if (this.claims != null) {
-            for (Claim claim : this.claims) {
-                if (claim.getId().equals(claimId)) {
-                    return claim;
-                }
-            }
+        Claim claim = claims.get(claimId);
+        if (claim != null) {
+            return claim;
         }
         return null;
     }
 
     @Override
     public List<Claim> getAll() {
-        return claims;
+        List<Claim> claimList = new ArrayList<>(claims.values());
+        return claimList;
     }
 
     @Override
-    public void addAll(List<Claim> claims) {
-        this.claims = new ArrayList<Claim>();
-        this.claims.addAll(claims);
+    public void addAll(HashMap<String, Claim> claims) {
+        this.claims = claims;
     }
 }

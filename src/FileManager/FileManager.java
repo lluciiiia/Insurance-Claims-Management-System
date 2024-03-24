@@ -15,17 +15,17 @@ import java.util.List;
 
 public interface FileManager {
 
-    public HashMap<String, List<?>> loadFiles() throws IOException;
+    public HashMap<String, HashMap<String, ?>> loadFiles() throws IOException;
 
     void loadReceiverBankingInfoFromFile() throws IOException;
 
     void loadCustomerRelationshipsFromFile() throws IOException;
 
-    public List<Customer> loadCustomersFromFile() throws IOException;
+    public HashMap<String, Customer> loadCustomersFromFile() throws IOException;
 
-    public List<InsuranceCard> loadInsuranceCardsFromFile() throws IOException;
-    public List<Claim> loadClaimsFromFile() throws IOException;
+    public HashMap<String, InsuranceCard> loadInsuranceCardsFromFile() throws IOException;
+    public HashMap<String, Claim> loadClaimsFromFile() throws IOException;
 
-    public void saveFiles(HashMap<String, List<?>> objectList) throws IOException;
+    public void saveFiles(HashMap<String, HashMap<String, ?>> objectsHashMap) throws IOException;
 
 }

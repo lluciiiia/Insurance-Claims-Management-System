@@ -5,6 +5,7 @@ package src.ClaimProcessManager;
 
 import src.domain.Claim;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface ClaimProcessManager {
@@ -18,5 +19,5 @@ public interface ClaimProcessManager {
 
     List<Claim> getAll();
 
-    void addAll(List<Claim> claims);
+    void addAll(HashMap<String, Claim> claims);
 }

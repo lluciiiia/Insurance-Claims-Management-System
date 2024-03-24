@@ -16,15 +16,13 @@ public class FileManagerImpl implements FileManager{
 
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    private List<Customer> customerList = new ArrayList<>();
     private HashMap<String, Customer> customersMap = new HashMap<>();
-    private List<InsuranceCard> insuranceCardList = new ArrayList<>();
-    private List<ReceiverBankingInfo> receiverBankingInfoList = new ArrayList<>();
+    private HashMap<String, InsuranceCard> insuranceCardsMap = new HashMap<>();
+    private HashMap<String, Claim> claimsMap = new HashMap<>();
     private HashMap<String, ReceiverBankingInfo> receiverBankingInfoHashMap = new HashMap<>();
-    private List<Claim> claimList = new ArrayList<>();
 
     @Override
-    public HashMap<String, List<?>> loadFiles() throws IOException {
+    public HashMap<String, HashMap<String, ?>> loadFiles() throws IOException {
         loadCustomersFromFile();
         loadCustomerRelationshipsFromFile();
         loadInsuranceCardsFromFile();
@@ -34,16 +32,17 @@ public class FileManagerImpl implements FileManager{
 ////        }
         loadReceiverBankingInfoFromFile();
         loadClaimsFromFile();
-        HashMap<String, List<?>> dataMap = new HashMap<>();
-        dataMap.put("Customer", customerList);
-        dataMap.put("InsuranceCard", insuranceCardList);
-        dataMap.put("Claim", claimList);
+        HashMap<String, HashMap<String, ?>> dataMap = new HashMap<>();
+        dataMap.put("Customer", customersMap);
+        dataMap.put("InsuranceCard", insuranceCardsMap);
+        dataMap.put("Claim", claimsMap);
+        dataMap.put("ReceiverBankingInfo", receiverBankingInfoHashMap);
 
         return dataMap;
     }
 
     @Override
-    public List<Customer> loadCustomersFromFile() throws IOException {
+    public HashMap<String, Customer> loadCustomersFromFile() throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(CUSTOMERS_FILE.toFile()))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -52,11 +51,10 @@ public class FileManagerImpl implements FileManager{
                 String fullName = parts[1];
                 CustomerType customerType = CustomerType.valueOf(parts[2]);
                 Customer customer = new Customer(id, fullName, customerType);
-                customerList.add(customer);
                 customersMap.put(id, customer);
             }
         }
-        return customerList;
+        return customersMap;
     }
 
     @Override
@@ -83,7 +81,7 @@ public class FileManagerImpl implements FileManager{
     }
 
     @Override
-    public List<InsuranceCard> loadInsuranceCardsFromFile() throws IOException {
+    public HashMap<String, InsuranceCard> loadInsuranceCardsFromFile() throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(INSURANCE_CARDS_FILE.toFile()))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -99,12 +97,12 @@ public class FileManagerImpl implements FileManager{
                 InsuranceCard insuranceCard = new InsuranceCard(cardNumber, dependent, policyOwner, expirationDate);
                 dependent.setInsuranceCard(insuranceCard);
 
-                insuranceCardList.add(insuranceCard);
+                insuranceCardsMap.put(cardNumber, insuranceCard);
             }
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        return insuranceCardList;
+        return insuranceCardsMap;
     }
 
 
@@ -121,15 +119,13 @@ public class FileManagerImpl implements FileManager{
 
                 String insuredCustomerName = customersMap.get(insuredCustomerId).getFullName();
                 ReceiverBankingInfo receiverBankingInfo = new ReceiverBankingInfo(id, bank, insuredCustomerName, number);
-                receiverBankingInfoList.add(receiverBankingInfo);
                 receiverBankingInfoHashMap.put(id, receiverBankingInfo);
             }
         }
     }
 
     @Override
-    public List<Claim> loadClaimsFromFile() {
-
+    public HashMap<String, Claim> loadClaimsFromFile() {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(CLAIMS_FILE.toFile()))) {
             String line;
@@ -159,17 +155,17 @@ public class FileManagerImpl implements FileManager{
 
                 insuredPerson.addClaim(claim);
 
-                claimList.add(claim);
+                claimsMap.put(id, claim);
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
 
-        return claimList;
+        return claimsMap;
     }
 
     @Override
-    public void saveFiles(HashMap<String, List<?>> objectList) throws IOException {
+    public void saveFiles(HashMap<String, HashMap<String, ?>> objectsHashMap) throws IOException {
         // Implement saving data to files
     }
 

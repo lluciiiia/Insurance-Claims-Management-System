@@ -5,6 +5,7 @@ import src.ClaimProcessManager.ClaimProcessManagerImpl;
 import src.FileManager.FileManager;
 import src.FileManager.FileManagerImpl;
 import src.domain.Claim;
+import src.domain.Customer;
 
 import java.io.IOException;
 import java.util.*;
@@ -13,11 +14,11 @@ import java.util.*;
  * @author <Seokyung Kim - s3939114>
  */
 public class Application {
-    private HashMap<String, List<?>> dataMap;
+    private HashMap<String, HashMap<String, ?>> dataMap;
     private final ClaimProcessManager claimProcessManager;
     private final FileManager fileManager;
 
-    public Application(ClaimProcessManager claimProcessManager, HashMap<String, List<?>> dataMap, FileManager fileManager) {
+    public Application(ClaimProcessManager claimProcessManager, HashMap<String, HashMap<String, ?>> dataMap, FileManager fileManager) {
         this.claimProcessManager = claimProcessManager;
         this.dataMap = dataMap;
         this.fileManager = fileManager;
@@ -48,7 +49,7 @@ public class Application {
 
             switch (choice) {
                 case 1:
-                    util.handleAddClaim(claimProcessManager);
+                    util.handleAddClaim(claimProcessManager, dataMap);
                     break;
                 case 2:
                     util.handleUpdateClaim(claimProcessManager);
@@ -77,7 +78,7 @@ public class Application {
     private void saveDataAndExit() {
         try {
             // Save all data to files using FileManager
-            fileManager.saveFiles((HashMap<String, List<?>>) dataMap);
+            fileManager.saveFiles((HashMap<String, HashMap<String, ?>>) dataMap);
         } catch (IOException e) {
             System.out.println("An error occurred while saving data: " + e.getMessage());
         }
@@ -89,10 +90,10 @@ public class Application {
         // Initialize ClaimProcessManager and FileManager
         ClaimProcessManager claimProcessManager = new ClaimProcessManagerImpl();
         FileManager fileManager = new FileManagerImpl();
-        HashMap<String, List<?>> dataMap = fileManager.loadFiles();
+        HashMap<String, HashMap<String, ?>> dataMap = fileManager.loadFiles();
 
         // Retrieve claims from dataMap and add them to ClaimProcessManager
-        List<Claim> claims = (List<Claim>) dataMap.get("Claim");
+        HashMap<String, Claim> claims = (HashMap<String, Claim>) dataMap.get("Claim");
         claimProcessManager.addAll(claims);
 
         // Initialize Application with ClaimProcessManager and FileManager

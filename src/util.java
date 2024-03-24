@@ -82,7 +82,7 @@ public class util {
 
         List<String> documents;
         do {
-            System.out.print("Documents (separated by comma): ");
+            System.out.print("Documents (ClaimId_CardNumber_DocumentName.pdf) (separated by comma): ");
             String documentsStr = scanner.nextLine();
             documents = Arrays.asList(documentsStr.split(","));
         } while (!isValidDocuments(claimId, cardNumber, documents));
@@ -153,15 +153,26 @@ public class util {
 
     public static ReceiverBankingInfo getReceiverBankingInfoFromUser(HashMap<String, HashMap<String, ?>> dataMap) {
         System.out.print("Enter Receiver Banking Info ID: ");
-        String receiverBankingInfoId = scanner.nextLine();
+        String receiverBankingInfoId;
+
         HashMap<String, ReceiverBankingInfo> receiverBankingInfoMap = (HashMap<String, ReceiverBankingInfo>) dataMap.get("ReceiverBankingInfo");
-        ReceiverBankingInfo receiverBankingInfo = receiverBankingInfoMap.get(receiverBankingInfoId);
-        if (receiverBankingInfo == null) {
-            System.out.println("Receiver Banking Info ID not found. Please enter a valid ID.");
-            return null;
+        ReceiverBankingInfo receiverBankingInfo;
+
+        // Loop until a valid ID is provided
+        while (true) {
+            receiverBankingInfoId = scanner.nextLine();
+            receiverBankingInfo = receiverBankingInfoMap.get(receiverBankingInfoId);
+
+            // Check if the entered ID exists in the hashmap
+            if (receiverBankingInfo != null) {
+                break; // Exit the loop if a valid ID is found
+            } else {
+                System.out.println("Receiver Banking Info ID not found. Please enter a valid ID:");
+            }
         }
         return receiverBankingInfo;
     }
+
 
 
     public static void handleUpdateClaim(ClaimProcessManager claimProcessManager) {

@@ -2,10 +2,10 @@ package src;
 
 import src.ClaimProcessManager.ClaimProcessManager;
 import src.ClaimProcessManager.ClaimProcessManagerImpl;
+import src.AdminOperationManager.*;
 import src.FileManager.FileManager;
 import src.FileManager.FileManagerImpl;
 import src.domain.Claim;
-import src.domain.Customer;
 
 import java.io.IOException;
 import java.util.*;
@@ -40,6 +40,7 @@ public class Application {
     }
 
     public void handleUserInput() {
+        AdminOperationManager adminManager = new AdminOperationManagerImpl();
         Scanner scanner = new Scanner(System.in);
         int choice;
 
@@ -49,19 +50,19 @@ public class Application {
 
             switch (choice) {
                 case 1:
-                    util.handleAddClaim(claimProcessManager, dataMap);
+                    adminManager.handleAddClaim(claimProcessManager, dataMap);
                     break;
                 case 2:
-                    util.handleUpdateClaim(claimProcessManager, dataMap);
+                    adminManager.handleUpdateClaim(claimProcessManager, dataMap);
                     break;
                 case 3:
-                    util.handleDeleteClaim(claimProcessManager);
+                    adminManager.handleDeleteClaim(claimProcessManager);
                     break;
                 case 4:
-                    util.handleGetClaim(claimProcessManager);
+                    adminManager.handleGetClaim(claimProcessManager);
                     break;
                 case 5:
-                    util.handleGetAllClaims(claimProcessManager);
+                    adminManager.handleGetAllClaims(claimProcessManager);
                     break;
                 case 6:
                     System.out.println("Exiting...");
@@ -77,7 +78,6 @@ public class Application {
 
     private void saveDataAndExit() {
         try {
-            // Save all data to files using FileManager
             fileManager.saveFiles((HashMap<String, HashMap<String, ?>>) dataMap);
         } catch (IOException e) {
             System.out.println("An error occurred while saving data: " + e.getMessage());
@@ -87,19 +87,15 @@ public class Application {
     }
 
     public static void main(String[] args) throws IOException {
-        // Initialize ClaimProcessManager and FileManager
         ClaimProcessManager claimProcessManager = new ClaimProcessManagerImpl();
         FileManager fileManager = new FileManagerImpl();
         HashMap<String, HashMap<String, ?>> dataMap = fileManager.loadFiles();
 
-        // Retrieve claims from dataMap and add them to ClaimProcessManager
         HashMap<String, Claim> claims = (HashMap<String, Claim>) dataMap.get("Claim");
         claimProcessManager.addAll(claims);
 
-        // Initialize Application with ClaimProcessManager and FileManager
         Application application = new Application(claimProcessManager, dataMap, fileManager);
 
-        // Start the text-based user interface
         application.start();
     }
 }

@@ -21,13 +21,20 @@ public class AdminOperationManagerImpl implements AdminOperationManager{
         System.out.println("Enter the following information for the new claim:");
 
         String claimId;
+
+        HashMap<String, Claim> claimHashMap = (HashMap<String, Claim>) dataMap.get("Claim");
+
+
         do {
             System.out.print("Claim ID (format: f**********): ");
             claimId = scanner.nextLine();
             if (!isValidClaimId(claimId)) {
                 System.out.println("Invalid claim ID format. Please enter a valid claim ID (format: f**********).");
             }
-        } while (!isValidClaimId(claimId));
+            if (!isUniqueClaimId(claimId, claimHashMap)) {
+                System.out.println("The ID already exists. Please enter another claim ID (format: f**********).");
+            }
+        } while (!isValidClaimId(claimId) || !isUniqueClaimId(claimId, claimHashMap));
 
         Date claimDate;
         do {
@@ -41,12 +48,11 @@ public class AdminOperationManagerImpl implements AdminOperationManager{
             }
         } while (claimDate == null);
 
-
-        HashMap<String, Customer> customerHashMap = (HashMap<String, Customer>) dataMap.get("Customer");
-
         System.out.print("Insured Person ID: ");
         String insuredPersonId;
         Customer insuredPerson;
+
+        HashMap<String, Customer> customerHashMap = (HashMap<String, Customer>) dataMap.get("Customer");
 
         do {
             insuredPersonId = scanner.nextLine();

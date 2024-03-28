@@ -67,10 +67,6 @@ public class util {
         return receiverBankingInfo;
     }
 
-
-
-
-
     // Method to validate the format of the claim ID
     public static boolean isValidClaimId(String claimId) {
         // Check if the claim ID follows the specified format (f********** where * is a digit)
@@ -86,5 +82,13 @@ public class util {
         return false;
     }
 
+    public static boolean isUniqueClaimId(String claimId, HashMap<String, Claim> claimHashMap) {
+        for (String key : claimHashMap.keySet()) {
+            if (key.equals(claimId)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
 }

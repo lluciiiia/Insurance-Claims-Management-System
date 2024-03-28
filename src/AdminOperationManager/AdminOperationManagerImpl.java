@@ -9,6 +9,9 @@ import java.util.*;
 
 import static src.util.*;
 
+/*
+ * @author <Seokyung Kim - s3939114>
+ */
 public class AdminOperationManagerImpl implements AdminOperationManager{
 
     static Scanner scanner = new Scanner(System.in);

@@ -21,10 +21,11 @@ public interface FileManager {
 
     void loadCustomerRelationshipsFromFile() throws IOException;
 
-    public HashMap<String, Customer> loadCustomersFromFile() throws IOException;
+    void loadCustomersFromFile() throws IOException;
 
-    public HashMap<String, InsuranceCard> loadInsuranceCardsFromFile() throws IOException;
-    public HashMap<String, Claim> loadClaimsFromFile() throws IOException;
+    void loadInsuranceCardsFromFile() throws IOException;
+
+    void loadClaimsFromFile() throws IOException;
 
     public void saveFiles(HashMap<String, HashMap<String, ?>> objectsHashMap) throws IOException;
 

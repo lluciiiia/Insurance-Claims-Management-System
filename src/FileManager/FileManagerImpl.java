@@ -26,10 +26,6 @@ public class FileManagerImpl implements FileManager{
         loadCustomersFromFile();
         loadCustomerRelationshipsFromFile();
         loadInsuranceCardsFromFile();
-////        System.out.println("Loaded Customers:");
-////        for (Customer customer : customerList) {
-////            customer.printCustomer();
-////        }
         loadReceiverBankingInfoFromFile();
         loadClaimsFromFile();
         HashMap<String, HashMap<String, ?>> dataMap = new HashMap<>();
@@ -42,7 +38,7 @@ public class FileManagerImpl implements FileManager{
     }
 
     @Override
-    public HashMap<String, Customer> loadCustomersFromFile() throws IOException {
+    public void loadCustomersFromFile() throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(CUSTOMERS_FILE.toFile()))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -54,7 +50,6 @@ public class FileManagerImpl implements FileManager{
                 customersMap.put(id, customer);
             }
         }
-        return customersMap;
     }
 
     @Override
@@ -81,18 +76,18 @@ public class FileManagerImpl implements FileManager{
     }
 
     @Override
-    public HashMap<String, InsuranceCard> loadInsuranceCardsFromFile() throws IOException {
+    public void loadInsuranceCardsFromFile() throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(INSURANCE_CARDS_FILE.toFile()))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 String cardNumber = parts[0];
-                String dependentId = parts[1];
+                String cardHolderId = parts[1];
                 String policyOwner = parts[2];
                 String dateString = parts[3];
                 Date expirationDate = dateFormat.parse(dateString);
 
-                Customer dependent = customersMap.get(dependentId);
+                Customer dependent = customersMap.get(cardHolderId);
 
                 InsuranceCard insuranceCard = new InsuranceCard(cardNumber, dependent, policyOwner, expirationDate);
                 dependent.setInsuranceCard(insuranceCard);
@@ -102,7 +97,6 @@ public class FileManagerImpl implements FileManager{
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        return insuranceCardsMap;
     }
 
 
@@ -125,7 +119,7 @@ public class FileManagerImpl implements FileManager{
     }
 
     @Override
-    public HashMap<String, Claim> loadClaimsFromFile() {
+    public void loadClaimsFromFile() {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(CLAIMS_FILE.toFile()))) {
             String line;
@@ -161,12 +155,16 @@ public class FileManagerImpl implements FileManager{
             e.printStackTrace();
         }
 
-        return claimsMap;
     }
 
     @Override
-    public void saveFiles(HashMap<String, HashMap<String, ?>> objectsHashMap) throws IOException {
-        // Implement saving data to files
+    public void saveFiles(HashMap<String, HashMap<String, ?>> dataMap) throws IOException {
+//        saveCustomersToFile((HashMap<String, Customer>) dataMap.get("Customer"));
+//        saveCustomerRelationshipsToFile((HashMap<String, Customer>) dataMap.get("Customer"));
+//        saveInsuranceCardsToFile((HashMap<String, InsuranceCard>) dataMap.get("InsuranceCard"));
+//        saveReceiverBankingInfoToFile((HashMap<String, ReceiverBankingInfo>) dataMap.get("ReceiverBankingInfo"));
+//        saveClaimsToFile((HashMap<String, Claim>) dataMap.get("Claim"));
     }
+
 
 }

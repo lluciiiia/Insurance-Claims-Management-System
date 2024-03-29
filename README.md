@@ -8,13 +8,13 @@ This repository contains the source code for an insurance claims management syst
 
 ## Key Features 🔑
 
-- Efficient management of customer information, including policy holders and dependents.
-- Comprehensive handling of insurance card details, ensuring accuracy and reliability.
-- Robust management of claim data, including claim creation, status tracking, and documentation.
-- User-friendly text-based interface for seamless interaction with the system.
-- Implementation of a flexible and extensible architecture to accommodate future enhancements.
+- Admins can add a claim.
+- Admins can update an existing claim.
+- Admins can delete an existing claim.
+- Admins can view the information about an existing claim.
+- Admins can view a list of all existing claims.
 
-## Getting Started 🚀 [TODO: FIX IT LATER]
+## Getting Started 🚀
 
 To get started with the Insurance Claims Management System:
 1. Clone this repository to your local machine.
@@ -22,12 +22,27 @@ To get started with the Insurance Claims Management System:
 3. Follow the prompts in the text-based user interface to interact with the system.
 4. Explore the functionalities and provide feedback for improvements.
 
-## Contributing 🤝
+## Sample Data Text Files 📁
 
-Contributions to the project are welcome! If you have ideas for enhancements or spot any issues, feel free to open an issue or submit a pull request. Together, we can improve the system and make it even more robust and user-friendly.
+- **Claims** (`/src/data/claims.txt`)
+: Contains ID, Claim Date, Insured Person's ID, Card Number, Exam Date, Documents, Claim Amount, Claim Status, Receiver Banking Info's ID.
+
+- **Customers** (`/src/data/customers.txt`)
+: Contains ID, Full Name, Customer Type.
+
+- **Customer Relationships** (`/src/data/customer_relationships.txt`)
+: Contains ID of policyholders and their dependents.
+
+- **Insurance Cards** (`/src/data/insurance_cards.txt`)
+: Contains Card Number, Cardholder's ID, Policy Owner, Expiration Date.
+
+- **Receiver Banking Info** (`/src/data/receiver_banking_info.txt`)
+: Contains ID, Bank, Insured Person's Name, Account Number.
+
 
 ## Acknowledgments 🙏
 
-Special thanks to the course instructors for providing guidance and resources for this assignment. Additionally, gratitude to all contributors and users who help improve the system through feedback and suggestions.
+Special thanks to the course instructors for providing guidance and resources for this assignment. 
+Additionally, gratitude to all contributors and users who help improve the system through feedback and suggestions.
 
 Thank you for visiting the Insurance Claims Management System repository. Happy coding! 🎉

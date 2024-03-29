@@ -108,11 +108,10 @@ public class FileManagerImpl implements FileManager{
                 String[] parts = line.split(",");
                 String id = parts[0];
                 String bank = parts[1];
-                String insuredCustomerId = parts[2];
+                String name = parts[2];
                 String number = parts[3];
 
-                String insuredCustomerName = customersMap.get(insuredCustomerId).getFullName();
-                ReceiverBankingInfo receiverBankingInfo = new ReceiverBankingInfo(id, bank, insuredCustomerName, number);
+                ReceiverBankingInfo receiverBankingInfo = new ReceiverBankingInfo(id, bank, name, number);
                 receiverBankingInfoHashMap.put(id, receiverBankingInfo);
             }
         }

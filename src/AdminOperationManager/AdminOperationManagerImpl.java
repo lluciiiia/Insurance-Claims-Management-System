@@ -306,6 +306,7 @@ public class AdminOperationManagerImpl implements AdminOperationManager{
             Claim claim = claimProcessManager.getOne(claimId);
             if (claim == null) {
                 System.out.println("Error: The claim with ID " + claimId + " does not exist.");
+                return;
             }
             System.out.println("Claim Information:");
             System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");

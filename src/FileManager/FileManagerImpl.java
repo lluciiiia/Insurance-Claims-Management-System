@@ -68,7 +68,7 @@ public class FileManagerImpl implements FileManager{
                     }
                 }
                 Customer policyHolder = customersMap.get(policyHolderId);
-                if (policyHolder != null) {
+                if (policyHolder != null && policyHolder.getCustomerType()==CustomerType.POLICY_HOLDER) {
                     policyHolder.setDependents(dependents);
                 }
             }
@@ -158,12 +158,72 @@ public class FileManagerImpl implements FileManager{
 
     @Override
     public void saveFiles(HashMap<String, HashMap<String, ?>> dataMap) throws IOException {
-//        saveCustomersToFile((HashMap<String, Customer>) dataMap.get("Customer"));
-//        saveCustomerRelationshipsToFile((HashMap<String, Customer>) dataMap.get("Customer"));
-//        saveInsuranceCardsToFile((HashMap<String, InsuranceCard>) dataMap.get("InsuranceCard"));
-//        saveReceiverBankingInfoToFile((HashMap<String, ReceiverBankingInfo>) dataMap.get("ReceiverBankingInfo"));
-//        saveClaimsToFile((HashMap<String, Claim>) dataMap.get("Claim"));
+        saveCustomersToFile((HashMap<String, Customer>) dataMap.get("Customer"));
+        saveCustomerRelationshipsToFile((HashMap<String, Customer>) dataMap.get("Customer"));
+        saveInsuranceCardsToFile((HashMap<String, InsuranceCard>) dataMap.get("InsuranceCard"));
+        saveReceiverBankingInfoToFile((HashMap<String, ReceiverBankingInfo>) dataMap.get("ReceiverBankingInfo"));
+        saveClaimsToFile((HashMap<String, Claim>) dataMap.get("Claim"));
     }
 
+    private void saveCustomersToFile(HashMap<String, Customer> customers) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CUSTOMERS_FILE.toFile()))) {
+            for (Customer customer : customers.values()) {
+                writer.write(customer.getId() + "," + customer.getFullName() + "," + customer.getCustomerType().toString());
+                writer.newLine();
+            }
+        }
+    }
 
+    private void saveCustomerRelationshipsToFile(HashMap<String, Customer> customers) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CUSTOMER_RELATIONSHIPS_FILE.toFile()))) {
+            for (Customer customer : customers.values()) {
+                StringBuilder line = new StringBuilder(customer.getId());
+                if (customer.getCustomerType() == CustomerType.POLICY_HOLDER) {
+                    for (Customer dependent : customer.getDependents()) {
+                        line.append(",").append(dependent.getId());
+                    }
+                }
+                writer.write(line.toString());
+                writer.newLine();
+            }
+        }
+    }
+
+    private void saveInsuranceCardsToFile(HashMap<String, InsuranceCard> insuranceCards) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(INSURANCE_CARDS_FILE.toFile()))) {
+            for (InsuranceCard insuranceCard : insuranceCards.values()) {
+                writer.write(insuranceCard.getCardNumber() + "," +
+                        insuranceCard.getCardHolder().getId() + "," +
+                        insuranceCard.getPolicyOwner() + "," +
+                        dateFormat.format(insuranceCard.getExpirationDate()));
+                writer.newLine();
+            }
+        }
+    }
+
+    private void saveReceiverBankingInfoToFile(HashMap<String, ReceiverBankingInfo> receiverBankingInfo) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(RECEIVER_BANKING_INFO_FILE.toFile()))) {
+            for (ReceiverBankingInfo info : receiverBankingInfo.values()) {
+                writer.write(info.getId() + "," + info.getBank() + "," + info.getName() + "," + info.getNumber());
+                writer.newLine();
+            }
+        }
+    }
+
+    private void saveClaimsToFile(HashMap<String, Claim> claims) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CLAIMS_FILE.toFile()))) {
+            for (Claim claim : claims.values()) {
+                writer.write(claim.getId() + "," +
+                        dateFormat.format(claim.getClaimDate()) + "," +
+                        claim.getInsuredPerson().getId() + "," +
+                        claim.getCardNumber() + "," +
+                        dateFormat.format(claim.getExamDate()) + "," +
+                        String.join(";", claim.getDocuments()) + "," +
+                        claim.getClaimAmount() + "," +
+                        claim.getStatus().toString() + "," +
+                        claim.getReceiverBankingInfo().getId());
+                writer.newLine();
+            }
+        }
+    }
 }

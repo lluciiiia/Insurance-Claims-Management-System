@@ -8,7 +8,6 @@ import java.util.*;
  * @author <Seokyung Kim - s3939114>
  */
 
-
 public class ClaimProcessManagerImpl implements ClaimProcessManager {
     private HashMap<String, Claim> claims;
 

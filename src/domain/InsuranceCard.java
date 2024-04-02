@@ -1,12 +1,10 @@
 package src.domain;
 
+import java.util.Date;
+
 /*
  * @author <Seokyung Kim - s3939114>
  */
-
-import src.domain.Customer;
-
-import java.util.Date;
 
 public class InsuranceCard {
     private String cardNumber;

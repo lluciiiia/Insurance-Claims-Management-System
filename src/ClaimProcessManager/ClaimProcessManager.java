@@ -1,12 +1,13 @@
 package src.ClaimProcessManager;
-/*
- * @author <Seokyung Kim - s3939114>
- */
 
 import src.domain.Claim;
 
 import java.util.HashMap;
 import java.util.List;
+
+/*
+ * @author <Seokyung Kim - s3939114>
+ */
 
 public interface ClaimProcessManager {
     void add(Claim claim);

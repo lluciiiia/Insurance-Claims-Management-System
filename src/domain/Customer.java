@@ -1,13 +1,13 @@
 package src.domain;
 
-/*
-* @author <Seokyung Kim - s3939114>
-*/
-
 import static src.domain.CustomerType.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/*
+ * @author <Seokyung Kim - s3939114>
+ */
 
 public class Customer {
     private String id;
@@ -22,28 +22,6 @@ public class Customer {
         this.fullName = fullName;
         this.customerType = customerType;
     }
-
-//    public Customer(String id, String fullName, InsuranceCard insuranceCard, List<Claim> claims, CustomerType customerType) {
-//        this.id = id;
-//        this.fullName = fullName;
-//        this.insuranceCard = insuranceCard;
-//        this.claims = claims;
-//        this.customerType = customerType;
-//    }
-//
-//    public Customer(String id, String fullName, InsuranceCard insuranceCard, List<Claim> claims, CustomerType customerType, List<Customer> dependents) {
-//        this.id = id;
-//        this.fullName = fullName;
-//        this.insuranceCard = insuranceCard;
-//        this.claims = claims;
-//
-//        if (customerType != CustomerType.POLICY_HOLDER && !dependents.isEmpty()) {
-//            throw new IllegalArgumentException("Only policy holders can have dependents.");
-//        }
-//
-//        this.customerType = customerType;
-//        this.dependents = dependents;
-//    }
 
     public String getId() {
         return id;
@@ -73,9 +51,9 @@ public class Customer {
         return claims;
     }
 
-//    public void setClaims(List<Claim> claims) {
-//        this.claims = claims;
-//    }
+    public void setClaims(List<Claim> claims) {
+        this.claims = claims;
+    }
 
     public void addClaim(Claim claim) {
         if (this.claims == null) {
@@ -84,9 +62,13 @@ public class Customer {
         this.claims.add(claim);
     }
 
-    public CustomerType getCustomerType() { return customerType; }
+    public CustomerType getCustomerType() {
+        return customerType;
+    }
 
-    public void setCustomerType(CustomerType customerType) { this.customerType = customerType; }
+    public void setCustomerType(CustomerType customerType) {
+        this.customerType = customerType;
+    }
 
     public List<Customer> getDependents() {
         if (this.customerType == DEPENDENT) {
@@ -134,6 +116,5 @@ public class Customer {
             }
         }
     }
-
 
 }

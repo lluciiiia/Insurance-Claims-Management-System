@@ -4,6 +4,10 @@ import src.domain.*;
 
 import java.util.*;
 
+/*
+ * @author <Seokyung Kim - s3939114>
+ */
+
 public class util {
     static Scanner scanner = new Scanner(System.in);
 
@@ -42,7 +46,6 @@ public class util {
         // Check if the file name consists of two parts and the extension is "pdf"
         return fileNameParts.length == 2 && fileNameParts[1].equalsIgnoreCase("pdf");
     }
-
 
 
     public static ReceiverBankingInfo getReceiverBankingInfoFromUser(HashMap<String, HashMap<String, ?>> dataMap) {

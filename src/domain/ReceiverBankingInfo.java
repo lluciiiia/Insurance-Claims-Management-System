@@ -1,9 +1,8 @@
 package src.domain;
+
 /*
  * @author <Seokyung Kim - s3939114>
  */
-
-import java.util.List;
 
 public class ReceiverBankingInfo {
     private String id;
@@ -18,9 +17,13 @@ public class ReceiverBankingInfo {
         this.number = number;
     }
 
-    public String getId() { return id; }
+    public String getId() {
+        return id;
+    }
 
-    public void setId(String id) { this.id = id; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getBank() {
         return bank;

@@ -1,12 +1,13 @@
 package src.domain;
-/*
- * @author <Seokyung Kim - s3939114>
- */
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+/*
+ * @author <Seokyung Kim - s3939114>
+ */
 
 public class Claim {
     private String id;
@@ -112,12 +113,10 @@ public class Claim {
         String formattedClaimDate = dateFormat.format(this.getClaimDate());
         String formattedExamDate = dateFormat.format(this.getExamDate());
 
-
-            System.out.printf("%-15s %-20s %-15s %-20s %-15s %-15s %-20s %-15s %-20s%n",
-                    this.getId(), formattedClaimDate, this.getInsuredPerson().getId(),
-                    this.getCardNumber(), formattedExamDate, this.getClaimAmount(),
-                    this.getStatus(), this.getReceiverBankingInfo().getId(), this.getDocuments());
+        System.out.printf("%-15s %-20s %-15s %-20s %-15s %-15s %-20s %-15s %-20s%n",
+                this.getId(), formattedClaimDate, this.getInsuredPerson().getId(),
+                this.getCardNumber(), formattedExamDate, this.getClaimAmount(),
+                this.getStatus(), this.getReceiverBankingInfo().getId(), this.getDocuments());
     }
-
 
 }

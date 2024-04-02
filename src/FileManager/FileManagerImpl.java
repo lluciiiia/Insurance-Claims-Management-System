@@ -7,7 +7,11 @@ import java.nio.file.*;
 import java.text.*;
 import java.util.*;
 
-public class FileManagerImpl implements FileManager{
+/*
+ * @author <Seokyung Kim - s3939114>
+ */
+
+public class FileManagerImpl implements FileManager {
     private final Path CUSTOMERS_FILE = Paths.get("src/data/customers.txt");
     private final Path CUSTOMER_RELATIONSHIPS_FILE = Paths.get("src/data/customer_relationships.txt");
     private final Path INSURANCE_CARDS_FILE = Paths.get("src/data/insurance_cards.txt");
@@ -68,7 +72,7 @@ public class FileManagerImpl implements FileManager{
                     }
                 }
                 Customer policyHolder = customersMap.get(policyHolderId);
-                if (policyHolder != null && policyHolder.getCustomerType()==CustomerType.POLICY_HOLDER) {
+                if (policyHolder != null && policyHolder.getCustomerType() == CustomerType.POLICY_HOLDER) {
                     policyHolder.setDependents(dependents);
                 }
             }
@@ -192,10 +196,7 @@ public class FileManagerImpl implements FileManager{
     private void saveInsuranceCardsToFile(HashMap<String, InsuranceCard> insuranceCards) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(INSURANCE_CARDS_FILE.toFile()))) {
             for (InsuranceCard insuranceCard : insuranceCards.values()) {
-                writer.write(insuranceCard.getCardNumber() + "," +
-                        insuranceCard.getCardHolder().getId() + "," +
-                        insuranceCard.getPolicyOwner() + "," +
-                        dateFormat.format(insuranceCard.getExpirationDate()));
+                writer.write(insuranceCard.getCardNumber() + "," + insuranceCard.getCardHolder().getId() + "," + insuranceCard.getPolicyOwner() + "," + dateFormat.format(insuranceCard.getExpirationDate()));
                 writer.newLine();
             }
         }
@@ -213,15 +214,7 @@ public class FileManagerImpl implements FileManager{
     private void saveClaimsToFile(HashMap<String, Claim> claims) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CLAIMS_FILE.toFile()))) {
             for (Claim claim : claims.values()) {
-                writer.write(claim.getId() + "," +
-                        dateFormat.format(claim.getClaimDate()) + "," +
-                        claim.getInsuredPerson().getId() + "," +
-                        claim.getCardNumber() + "," +
-                        dateFormat.format(claim.getExamDate()) + "," +
-                        String.join(";", claim.getDocuments()) + "," +
-                        claim.getClaimAmount() + "," +
-                        claim.getStatus().toString() + "," +
-                        claim.getReceiverBankingInfo().getId());
+                writer.write(claim.getId() + "," + dateFormat.format(claim.getClaimDate()) + "," + claim.getInsuredPerson().getId() + "," + claim.getCardNumber() + "," + dateFormat.format(claim.getExamDate()) + "," + String.join(";", claim.getDocuments()) + "," + claim.getClaimAmount() + "," + claim.getStatus().toString() + "," + claim.getReceiverBankingInfo().getId());
                 writer.newLine();
             }
         }

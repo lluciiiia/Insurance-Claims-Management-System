@@ -12,6 +12,7 @@ import java.util.Scanner;
 /*
  * @author <Seokyung Kim - s3939114>
  */
+
 public class MenuManager {
 
     public static void displayMenu() {

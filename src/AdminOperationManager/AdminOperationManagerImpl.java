@@ -2,6 +2,7 @@ package src.AdminOperationManager;
 
 import src.ClaimProcessManager.ClaimProcessManager;
 import src.domain.*;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,7 +14,7 @@ import static src.util.*;
  * @author <Seokyung Kim - s3939114>
  */
 
-public class AdminOperationManagerImpl implements AdminOperationManager{
+public class AdminOperationManagerImpl implements AdminOperationManager {
 
     static Scanner scanner = new Scanner(System.in);
     static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -166,7 +167,6 @@ public class AdminOperationManagerImpl implements AdminOperationManager{
             }
         }
 
-        // Switch case to handle each choice
         switch (choice) {
             case 1:
                 Date newClaimDate = null;
@@ -278,12 +278,14 @@ public class AdminOperationManagerImpl implements AdminOperationManager{
                 return;
         }
 
-        claimProcessManager.update(claimToUpdate);
-        System.out.println("Claim updated successfully!");
+        if (claimProcessManager.update(claimToUpdate))
+            System.out.println("Claim with ID " + claimId + " updated successfully.");
+        else System.out.println("Claim with ID " + claimId + " not found.");
+
     }
 
 
-    public void handleDeleteClaim(ClaimProcessManager claimProcessManager){
+    public void handleDeleteClaim(ClaimProcessManager claimProcessManager) {
         System.out.print("Enter the claim ID to delete: ");
         String claimId = scanner.nextLine();
 
@@ -321,7 +323,7 @@ public class AdminOperationManagerImpl implements AdminOperationManager{
 
     }
 
-    public void handleGetAllClaims(ClaimProcessManager claimProcessManager){
+    public void handleGetAllClaims(ClaimProcessManager claimProcessManager) {
         List<Claim> claims = claimProcessManager.getAll();
 
         System.out.println("Claims Information:");
@@ -330,7 +332,7 @@ public class AdminOperationManagerImpl implements AdminOperationManager{
                 "ID", "Claim Date", "Insured Person", "Card Number", "Exam Date", "Claim Amount", "Status", "Receiver Banking Info", "Documents");
         System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
-        for (Claim claim: claims) {
+        for (Claim claim : claims) {
             claim.printClaim();
         }
     }

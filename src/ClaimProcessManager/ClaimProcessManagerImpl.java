@@ -21,8 +21,12 @@ public class ClaimProcessManagerImpl implements ClaimProcessManager {
     }
 
     @Override
-    public void update(Claim claim) {
-        // Implement update logic
+    public boolean update(Claim claim) {
+        if (this.claims.containsKey(claim.getId())) {
+            this.claims.put(claim.getId(), claim);
+            return true;
+        }
+        return false;
     }
 
     @Override

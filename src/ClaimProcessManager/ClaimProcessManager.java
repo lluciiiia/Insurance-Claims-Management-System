@@ -12,7 +12,7 @@ import java.util.List;
 public interface ClaimProcessManager {
     void add(Claim claim);
 
-    void update(Claim claim);
+    boolean update(Claim claim);
 
     boolean delete(String claimId);
 

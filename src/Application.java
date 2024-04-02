@@ -2,7 +2,6 @@ package src;
 
 import src.ClaimProcessManager.ClaimProcessManager;
 import src.ClaimProcessManager.ClaimProcessManagerImpl;
-import src.MenuManager;
 import src.FileManager.FileManager;
 import src.FileManager.FileManagerImpl;
 import src.domain.Claim;

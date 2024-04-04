@@ -93,7 +93,6 @@ public class AdminOperationManagerImpl implements AdminOperationManager {
             }
         } while (examDate == null);
 
-        // TODO: automatic claimId and cardNumber?
         List<String> documents;
         do {
             System.out.print("Documents (ClaimId_CardNumber_DocumentName.pdf) (separated by comma): ");

@@ -36,13 +36,8 @@ public class Claim {
         this.receiverBankingInfo = receiverBankingInfo;
     }
 
-    // Getters and setters
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public Date getClaimDate() {

@@ -41,8 +41,7 @@ public class FileManagerImpl implements FileManager {
         return dataMap;
     }
 
-    @Override
-    public void loadCustomersFromFile() throws IOException {
+    private void loadCustomersFromFile() throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(CUSTOMERS_FILE.toFile()))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -56,8 +55,7 @@ public class FileManagerImpl implements FileManager {
         }
     }
 
-    @Override
-    public void loadCustomerRelationshipsFromFile() throws IOException {
+    private void loadCustomerRelationshipsFromFile() throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(CUSTOMER_RELATIONSHIPS_FILE.toFile()))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -79,8 +77,7 @@ public class FileManagerImpl implements FileManager {
         }
     }
 
-    @Override
-    public void loadInsuranceCardsFromFile() throws IOException {
+    private void loadInsuranceCardsFromFile() throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(INSURANCE_CARDS_FILE.toFile()))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -104,8 +101,7 @@ public class FileManagerImpl implements FileManager {
     }
 
 
-    @Override
-    public void loadReceiverBankingInfoFromFile() throws IOException {
+    private void loadReceiverBankingInfoFromFile() throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(RECEIVER_BANKING_INFO_FILE.toFile()))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -121,8 +117,7 @@ public class FileManagerImpl implements FileManager {
         }
     }
 
-    @Override
-    public void loadClaimsFromFile() {
+    private void loadClaimsFromFile() {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(CLAIMS_FILE.toFile()))) {
             String line;

@@ -9,18 +9,8 @@ import java.util.HashMap;
 
 public interface FileManager {
 
-    public HashMap<String, HashMap<String, ?>> loadFiles() throws IOException;
+    HashMap<String, HashMap<String, ?>> loadFiles() throws IOException;
 
-    void loadReceiverBankingInfoFromFile() throws IOException;
-
-    void loadCustomerRelationshipsFromFile() throws IOException;
-
-    void loadCustomersFromFile() throws IOException;
-
-    void loadInsuranceCardsFromFile() throws IOException;
-
-    void loadClaimsFromFile() throws IOException;
-
-    public void saveFiles(HashMap<String, HashMap<String, ?>> objectsHashMap) throws IOException;
+    void saveFiles(HashMap<String, HashMap<String, ?>> objectsHashMap) throws IOException;
 
 }

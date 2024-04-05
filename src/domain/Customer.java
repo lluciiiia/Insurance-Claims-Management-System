@@ -31,10 +31,6 @@ public class Customer {
         return fullName;
     }
 
-    public InsuranceCard getInsuranceCard() {
-        return insuranceCard;
-    }
-
     public void setInsuranceCard(InsuranceCard insuranceCard) {
         this.insuranceCard = insuranceCard;
     }

@@ -324,6 +324,7 @@ public class AdminOperationManagerImpl implements AdminOperationManager {
 
     public void handleGetAllClaims(ClaimProcessManager claimProcessManager) {
         List<Claim> claims = claimProcessManager.getAll();
+        Collections.sort(claims, Comparator.comparing(Claim::getId));
 
         System.out.println("Claims Information:");
         System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
